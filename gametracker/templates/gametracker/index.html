@@ -1,0 +1,16 @@
+{% extends 'gametracker/base.html' %}
+
+{% block content %}
+    <p class="introduction">
+        <span class="elo_tracker">Elo tracker</span> permet d'enregistrer les parties d'Age of Empires II lors des LAN et de suivre
+        la progression des joueurs.<br />
+        Le système permet également de composer facilement des équipes 
+        équilibrées en fonction des joueurs présents.
+    </p>
+
+    <h2>Classement actuel</h2>
+    {% include "gametracker/ranking.html" %}
+    </body>
+</html>
+
+{% endblock content %}

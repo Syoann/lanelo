@@ -1,0 +1,35 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+{% load custom_tags %}
+
+{% block content %}
+<h2>{% trans "Composition des équipes" %}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">{% trans "Valider" %}<span class='arrow'>&#x2713;</span></button>
+
+{% if team1 and team2 %}
+    <h3>{% trans "&Eacute;quipes propos&eacute;es :" %}</h3>
+
+    <p>{{ team1.players|join_by_attr:"name" }} ({{ team1.elo|floatformat:"0" }})<br />
+       vs.<br />
+       {{ team2.players|join_by_attr:"name" }} ({{ team2.elo|floatformat:"0" }})
+    </p>
+
+    {% if not team1eq is None and not team2eq is None %}
+
+    <p>{% trans "ou bien :" %}</b>
+
+    <p>{{ team1eq.players|join_by_attr:"name" }} ({{ team1eq.elo|floatformat:"0" }})<br />
+        vs.<br />
+       {{ team2eq.players|join_by_attr:"name" }} ({{ team2eq.elo|floatformat:"0" }})
+    </p>
+    {% endif %}
+
+{% endif %}
+
+{% endblock content %}

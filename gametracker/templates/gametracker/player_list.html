@@ -1,0 +1,14 @@
+{% extends 'gametracker/base.html' %}
+
+{% block content %}
+<h2>Classement des joueurs</h2>
+
+{% if player_list %}
+
+{% include 'gametracker/ranking.html' %}
+
+{% else %}
+    <p>No player in the database.</p>
+{% endif %}
+
+{% endblock content %}

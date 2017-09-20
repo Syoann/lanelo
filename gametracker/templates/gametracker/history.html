@@ -1,0 +1,53 @@
+{% extends 'gametracker/base.html' %}
+
+{% block content %}
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<h2>Historique des parties</h2>
+
+<table class="history">
+    <tr>
+        <th>Date</th>
+        <th>Carte</th>
+        <th>&Eacute;quipes</th>
+    </tr>
+
+    {% for game in game_list %}
+        <tr><td>{{ game.date|date:"d M. Y" }}</td>
+            <td>{{ game.game_map }}</td>
+            <td>
+                <table class="team_composition">
+                    <tr>
+                    <! -- Team 1: winner or loser ? -->
+                    {% if game.winner == "team1" %}
+                        <td class='won'>W</td>
+                    {% else %}
+                        <td class="lost">L</td>
+                    {% endif %}
+
+                    <!-- Team 1 composition -->
+                    {% for player in game.team1.all %}
+                        <td><span class="arrow">&#x25cf;</span>&nbsp;{{ player.name }}</td>
+                    {% endfor %}
+                    </tr>
+
+                    <! -- Team 2: winner or loser ? -->
+                    <tr>
+                    {% if game.winner == "team2" %}
+                        <td class='won'>W</td>
+                    {% else %}
+                        <td class="lost">L</td>
+                    {% endif %}
+
+                    <!-- Team 2 composition -->
+                    {% for player in game.team2.all %}
+                        <td><span class="arrow">&#x25cf;</span>&nbsp;{{ player.name }}</td>
+                    {% endfor %}
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}

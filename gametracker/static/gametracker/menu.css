@@ -1,0 +1,86 @@
+
+/*Menu */
+#menu, #menu ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+#menu {
+    width: 450px;
+    margin: auto;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: bold;
+    line-height: 27px;
+    text-align: center;
+    font-family: Sans-serif;
+}
+#menu li {
+    display: inline-block;
+    background-color: #34495e;
+    margin: -3px;
+    width: 100px;
+}
+
+#menu li:nth-child(1){
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+#menu li:nth-last-child(1){
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+#menu ul li:nth-child(1), #menu ul li:nth-last-child(1) {
+    border-radius: 0;
+}
+
+#menu ul li {
+    display: inherit;
+    background-color: #34495e;
+    text-align: left;
+    border-radius: 0;
+}
+
+#menu ul li a {
+    padding-left: 5px;
+}
+
+#menu a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
+#menu a:hover {
+    color: #2ECC71;
+}
+#menu ul {
+    position: absolute;
+    left: -999em;
+    text-align: left;
+    z-index: 1000;
+}
+#menu li:hover ul {
+    left: auto;
+    margin-left: 3px;
+}
+.arrow {
+    color: #2ECC71;
+}
+
+@media screen and (max-width: 700px) {
+    #menu {
+        width: 100%;
+        overflow: scroll;
+    }
+    #menu li {
+        width: 25%;
+    }
+    #menu li ul {
+        width: 25%;
+    }
+    #menu li ul li {
+        width: 100%;
+    }
+}

@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<ul id="menu">
+    <li><a href="{% url 'gametracker:index' %}">Home</a></li>
+    <li>
+        <a href="#">{% trans "Joueurs" %}<span class='arrow'>&#x25be;</span></a>
+        <ul>
+            <li><a href="{% url 'gametracker:players' %}">{% trans "Classement" %}</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">{% trans "Parties" %}<span class='arrow'>&#x25be;</span></a>
+        <ul>
+            <li><a href="{% url 'gametracker:history' %}">{% trans "Historique" %}</a></li>
+            <li><a href="{% url 'gametracker:add_game' %}">{% trans "Ajout partie" %}</a></li>
+        </ul>
+    </li>
+    <li><a href="{% url 'gametracker:balance_teams' %}">{% trans "Composer" %}</a></li>
+</ul>

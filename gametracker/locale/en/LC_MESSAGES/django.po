@@ -1,0 +1,102 @@
+# Gametracker translation (en)
+# Copyright (C) 2017
+# This file is distributed under the same license as the gametracker package.
+# Yoann Seeleuthner (2017)
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-19 21:36+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: gametracker/forms.py:9
+msgid "Carte"
+msgstr "Map"
+
+#: gametracker/forms.py:10
+msgid "Équipe 1"
+msgstr "Team 1"
+
+#: gametracker/forms.py:11
+msgid "Équipe 2"
+msgstr "Team 2"
+
+#: gametracker/forms.py:16
+msgid "Gagnant"
+msgstr "Winner"
+
+#: gametracker/forms.py:20
+msgid "Joueurs présents"
+msgstr "Present players"
+
+#: gametracker/templates/gametracker/add_game.html:6
+msgid "Ajout d'une partie"
+msgstr "Add game"
+
+#: gametracker/templates/gametracker/add_game.html:13
+msgid "Enregistrer"
+msgstr "Save"
+
+#: gametracker/templates/gametracker/balance_teams.html:6
+msgid "Composition des équipes"
+msgstr "Create teams"
+
+#: gametracker/templates/gametracker/balance_teams.html:13
+msgid "Valider"
+msgstr "Run"
+
+#: gametracker/templates/gametracker/balance_teams.html:16
+msgid "&Eacute;quipes propos&eacute;es :"
+msgstr "Proposed teams:"
+
+#: gametracker/templates/gametracker/balance_teams.html:25
+msgid "ou bien :"
+msgstr "or:"
+
+#: gametracker/templates/gametracker/menu.html:6
+msgid "Joueurs"
+msgstr "Players"
+
+#: gametracker/templates/gametracker/menu.html:8
+msgid "Classement"
+msgstr "Ranking"
+
+#: gametracker/templates/gametracker/menu.html:12
+#, fuzzy
+#| msgid "# Parties"
+msgid "Parties"
+msgstr "# Games"
+
+#: gametracker/templates/gametracker/menu.html:14
+msgid "Historique"
+msgstr "History"
+
+#: gametracker/templates/gametracker/menu.html:15
+#, fuzzy
+#| msgid "Ajout d'une partie"
+msgid "Ajout partie"
+msgstr "Add game"
+
+#: gametracker/templates/gametracker/menu.html:18
+msgid "Composer"
+msgstr "Teams"
+
+#: gametracker/templates/gametracker/ranking.html:6
+msgid "Nom"
+msgstr "Name"
+
+#: gametracker/templates/gametracker/ranking.html:7
+msgid "Elo"
+msgstr "Elo"
+
+#: gametracker/templates/gametracker/ranking.html:8
+msgid "# Parties"
+msgstr "# Games"

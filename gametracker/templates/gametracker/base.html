@@ -1,0 +1,26 @@
+{% load static %}
+
+<!doctype html>
+
+<html lang="fr">
+    <head>
+        <title>LAN Elo Tracker</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
+        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/menu.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/style.css' %}" />
+    </head>
+
+    <body>
+        <div class="page_header">
+            <h1>LAN Elo Tracker</h1>
+        </div>
+
+        {% include "gametracker/menu.html" %}
+        
+        <div>
+            {% block content %}
+            {% endblock %}
+        </div>
+    </body>
+</html>

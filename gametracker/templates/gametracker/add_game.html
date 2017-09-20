@@ -1,0 +1,16 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<h2>{% trans "Ajout d'une partie" %}</h2>
+
+<form method="POST">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">{% trans "Enregistrer" %}</button>
+</form>
+
+{% endblock content %}
