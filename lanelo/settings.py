@@ -23,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '(2-cyv&wa!c*8^h86)p9*mu-qpm6q18*w0x-u565ig*f$q#+qy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [u'192.168.0.14']
+ALLOWED_HOSTS = [u'192.168.0.14', u'www.servyo.fr', u'servyo.fr']
 
 
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'pipeline',
     'gametracker'
 ]
 
@@ -106,13 +107,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
 LANGUAGE_CODE = 'fr-fr'
-
 TIME_ZONE = 'Europe/Paris'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 gettext = lambda x: x
@@ -128,5 +125,29 @@ LOCALE_PATHS = (
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
 
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'pipeline.finders.PipelineFinder',
+)
+
+PIPELINE = {
+    'PIPELINE_ENABLED': True,
+    'STYLESHEETS': {
+        'style': {
+            'source_filenames': ('gametracker/static/gametracker/style.css', 
+                                 'gametracker/static/gametracker/menu.css', 
+                                 'gametracker/static/gametracker/forms.css', 
+                                 'gametracker/static/gametracker/tables.css', 
+                                 'gametrakcer/static/gametracker/media.css'),
+            'output_filename': 'css/style_min.css'
+        }
+    }
+}
+
+PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.NoopCompressor'
+
+STATIC_ROOT = '/home/yoann/Sites/lanelo/css/'
 STATIC_URL = '/static/'

@@ -27,7 +27,7 @@
 
                     <!-- Team 1 composition -->
                     {% for player in game.team1.all %}
-                        <td><span class="arrow">&#x25cf;</span>&nbsp;{{ player.name }}</td>
+                        <td>{{ player.name }}</td>
                     {% endfor %}
                     </tr>
 
@@ -41,7 +41,7 @@
 
                     <!-- Team 2 composition -->
                     {% for player in game.team2.all %}
-                        <td><span class="arrow">&#x25cf;</span>&nbsp;{{ player.name }}</td>
+                        <td>{{ player.name }}</td>
                     {% endfor %}
                     </tr>
                 </table>

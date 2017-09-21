@@ -1,0 +1,54 @@
+/* Forms */
+form {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: auto;
+    text-align: center;
+}
+
+form button {
+    color: white;
+    background-color: #34495e;
+    padding: 7px;
+    border: none;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+    vertical-align: top;
+}
+
+select {
+    background-color: none;
+    border: solid 1px #34495e;
+    width: 120px;
+    overflow-y: auto;
+}
+
+
+/* Specific froms */
+
+#id_players {
+    height: 200px;
+}
+
+@media screen and (max-width: 700px) {
+    .introduction {
+        width: 100%;
+    }
+        
+    .player_list, .history {
+        width: 100%;
+    }
+
+    .history > tbody > tr > td:nth-child(2),
+    .history > tbody > tr > th:nth-child(2){
+        display: none;
+    }
+
+    .team_composition td:nth-child(1){
+        width: 20px;
+    }
+
+    #id_players {
+        height: 25px;

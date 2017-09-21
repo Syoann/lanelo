@@ -36,7 +36,27 @@ class Game(models.Model):
     def update_elo(self):
         elo_calc = EloCalculator(Team(self.team1), Team(self.team2), self.winner)
         return elo_calc.calc()       
-        
+ 
+class Team:
+    """A team is a group of players. An Elo can be calculated for the team"""
+    def __init__(self, players):
+        self.players = players
+        self.elo = self._calc_elo()
+
+    def add_player(self, player):
+        self.players.extend(player)
+        self.elo = self._calc_elo
+
+    def get_elo(self):
+        return self.elo
+
+    def _calc_elo(self):
+        # Multiplicative factor for multiplayer teams
+        MP_FACTOR = 300
+
+        elos = [p.elo for p in self.players]
+        return sum(elos) / float(len(elos)) + MP_FACTOR * math.log(len(elos), 2)
+
 
 class TeamBalancer:
     """Create two balanced teams from a list of players"""
@@ -69,27 +89,6 @@ class TeamBalancer:
             (self.result["team1eq"], self.result["team2eq"]) = (None, None)
 
         return self.result
-
-class Team:
-    """A team is a group of players. An Elo can be calculated for the team"""
-    def __init__(self, players):
-        self.players = players
-        self.elo = self._calc_elo()
-
-    def add_player(self, player):
-        self.players.extend(player)
-        self.elo = self._calc_elo
-
-    def get_elo(self):
-        return self.elo
-
-    def _calc_elo(self):
-        # Multiplicative factor for multiplayer teams
-        MP_FACTOR = 300
-
-        elos = [p.elo for p in self.players]
-        return sum(elos) / float(len(elos)) + MP_FACTOR * math.log(len(elos), 2)
-
 
 class EloCalculator:
     def __init__(self, team1, team2, winner="team1"):

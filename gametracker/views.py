@@ -24,16 +24,19 @@ class HistoryView(generic.ListView):
     model = Game
     template_name = "gametracker/history.html"
 
+    def get_queryset(self):
+        return Game.objects.order_by('-date')
+
+
 def balance_teams(request):
     if request.method == "POST":
         form = TeamsForm(request.POST)
     
         if form.is_valid():
             team_balancer = TeamBalancer(form.cleaned_data["players"])
-            teams = team_balancer.balance()
 
             context = {'form': form}
-            context.update(teams)
+            context.update(team_balancer.balance())
 
             return render(request, "gametracker/balance_teams.html", context)
     else:
