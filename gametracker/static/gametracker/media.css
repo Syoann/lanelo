@@ -13,6 +13,10 @@
     }
 
     /* Game history */
+    .history {
+        width: 100%;
+    }
+
     .history > tbody > tr > td:nth-child(2),
     .history > tbody > tr > th:nth-child(2){
         display: none;

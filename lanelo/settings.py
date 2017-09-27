@@ -20,12 +20,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '(2-cyv&wa!c*8^h86)p9*mu-qpm6q18*w0x-u565ig*f$q#+qy'
+with open('/etc/secret_key_lanelo.txt') as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = [u'192.168.0.14', u'www.servyo.fr', u'servyo.fr']
+ALLOWED_HOSTS = [u'192.168.0.14', u'lanelo.servyo.fr', u'www.lanelo.servyo.fr']
 
 
 # Application definition
@@ -37,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'pipeline',
-    'gametracker'
+    'compressor',
+    'gametracker',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +52,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
 ]
+
+X_FRAME_OPTIONS = 'DENY'
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
 
 ROOT_URLCONF = 'lanelo.urls'
 
@@ -125,29 +132,13 @@ LOCALE_PATHS = (
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
-
+COMPRESS_ENABLED = True
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'pipeline.finders.PipelineFinder',
+    'compressor.finders.CompressorFinder',
 )
 
-PIPELINE = {
-    'PIPELINE_ENABLED': True,
-    'STYLESHEETS': {
-        'style': {
-            'source_filenames': ('gametracker/static/gametracker/style.css', 
-                                 'gametracker/static/gametracker/menu.css', 
-                                 'gametracker/static/gametracker/forms.css', 
-                                 'gametracker/static/gametracker/tables.css', 
-                                 'gametrakcer/static/gametracker/media.css'),
-            'output_filename': 'css/style_min.css'
-        }
-    }
-}
-
-PIPELINE['CSS_COMPRESSOR'] = 'pipeline.compressors.NoopCompressor'
-
-STATIC_ROOT = '/home/yoann/Sites/lanelo/css/'
+STATIC_ROOT = '/home/yoann/Sites/lanelo/static'
 STATIC_URL = '/static/'
+

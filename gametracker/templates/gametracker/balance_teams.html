@@ -11,8 +11,10 @@
     {{ form.as_p }}
 
     <button type="submit">{% trans "Valider" %}<span class='arrow'>&#x2713;</span></button>
+</form>
 
 {% if team1 and team2 %}
+<div class="proposed_teams">
     <h3>{% trans "&Eacute;quipes propos&eacute;es :" %}</h3>
 
     <p>{{ team1.players|join_by_attr:"name" }} ({{ team1.elo|floatformat:"0" }})<br />
@@ -29,7 +31,7 @@
        {{ team2eq.players|join_by_attr:"name" }} ({{ team2eq.elo|floatformat:"0" }})
     </p>
     {% endif %}
-
+</div>
 {% endif %}
 
 {% endblock content %}
