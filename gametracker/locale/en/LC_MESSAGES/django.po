@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-27 23:32+0200\n"
+"POT-Creation-Date: 2017-09-28 15:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,10 +32,6 @@ msgstr "Add game"
 #: gametracker/templates/gametracker/add_game.html:13
 msgid "Enregistrer"
 msgstr "Save"
-
-#: gametracker/templates/gametracker/back.html:2
-msgid "retour"
-msgstr ""
 
 #: gametracker/templates/gametracker/balance_teams.html:6
 #, fuzzy

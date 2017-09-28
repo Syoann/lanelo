@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-27 23:32+0200\n"
+"POT-Creation-Date: 2017-09-28 15:20+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,92 +20,88 @@ msgstr ""
 
 #: lanelo/settings.py:125
 msgid "English"
-msgstr ""
+msgstr "Anglais"
 
 #: lanelo/settings.py:126
 msgid "French"
-msgstr ""
+msgstr "Français"
 
 #: gametracker/templates/gametracker/add_game.html:6
 msgid "Ajout d'une partie"
-msgstr ""
+msgstr "Ajout d'une partie"
 
 #: gametracker/templates/gametracker/add_game.html:13
 msgid "Enregistrer"
-msgstr ""
-
-#: gametracker/templates/gametracker/back.html:2
-msgid "retour"
-msgstr ""
+msgstr "Enregistrer"
 
 #: gametracker/templates/gametracker/balance_teams.html:6
 msgid "Composition des equipes"
-msgstr ""
+msgstr "Composition des équipes"
 
 #: gametracker/templates/gametracker/balance_teams.html:13
 msgid "Valider"
-msgstr ""
+msgstr "Valider"
 
 #: gametracker/templates/gametracker/balance_teams.html:18
 msgid "&Eacute;quipes propos&eacute;es :"
-msgstr ""
+msgstr "&Eacute;quipes proposées :"
 
 #: gametracker/templates/gametracker/balance_teams.html:27
 msgid "ou bien :"
-msgstr ""
+msgstr "ou bien"
 
 #: gametracker/templates/gametracker/history.html:7
 msgid "Historique des parties"
-msgstr ""
+msgstr "Historique des parties"
 
 #: gametracker/templates/gametracker/history.html:11
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
 #: gametracker/templates/gametracker/history.html:12
 msgid "Carte"
-msgstr ""
+msgstr "Carte"
 
 #: gametracker/templates/gametracker/history.html:13
 msgid "Equipes"
-msgstr ""
+msgstr "&Eacute;quipes"
 
 #: gametracker/templates/gametracker/index.html:12
 msgid "Classement actuel"
-msgstr ""
+msgstr "Classement actuel"
 
 #: gametracker/templates/gametracker/menu.html:6
 msgid "Joueurs"
-msgstr ""
+msgstr "Joueurs"
 
 #: gametracker/templates/gametracker/menu.html:8
 msgid "Classement"
-msgstr ""
+msgstr "Classement"
 
 #: gametracker/templates/gametracker/menu.html:12
 msgid "Parties"
-msgstr ""
+msgstr "Parties"
 
 #: gametracker/templates/gametracker/menu.html:14
 msgid "Historique"
-msgstr ""
+msgstr "Historique"
 
 #: gametracker/templates/gametracker/menu.html:15
 msgid "Ajout partie"
-msgstr ""
+msgstr "Ajout partie"
 
 #: gametracker/templates/gametracker/menu.html:18
 msgid "Composer"
-msgstr ""
+msgstr "Composer"
 
 #: gametracker/templates/gametracker/ranking.html:6
 msgid "Nom"
-msgstr ""
+msgstr "Nom"
 
 #: gametracker/templates/gametracker/ranking.html:7
 msgid "Elo"
-msgstr ""
+msgstr "Elo"
 
 #: gametracker/templates/gametracker/ranking.html:8
 msgid "# Parties"
-msgstr ""
+msgstr "# Parties"
