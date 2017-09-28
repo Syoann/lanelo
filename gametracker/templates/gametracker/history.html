@@ -1,15 +1,16 @@
 {% extends 'gametracker/base.html' %}
+{% load i18n %}
 
 {% block content %}
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<h2>Historique des parties</h2>
+<h2>{% trans 'Historique des parties' %}</h2>
 
 <table class="history">
     <tr>
-        <th>Date</th>
-        <th>Carte</th>
-        <th>&Eacute;quipes</th>
+        <th>{% trans 'Date' %}</th>
+        <th>{% trans 'Carte' %}</th>
+        <th>{% trans 'Equipes' %}</th>
     </tr>
 
     {% for game in game_list %}

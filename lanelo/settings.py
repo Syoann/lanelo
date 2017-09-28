@@ -24,7 +24,7 @@ with open('/etc/secret_key_lanelo.txt') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', False)
+DEBUG = False
 
 ALLOWED_HOSTS = [u'192.168.0.14', u'lanelo.servyo.fr', u'www.lanelo.servyo.fr']
 
@@ -127,12 +127,13 @@ LANGUAGES = (
 )
 
 LOCALE_PATHS = (
-    os.path.join(BASE_DIR, '../gametracker/locale/'),
+    os.path.join(BASE_DIR, 'gametracker/locale/'),
 )
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -141,4 +142,9 @@ STATICFILES_FINDERS = (
 
 STATIC_ROOT = '/home/yoann/Sites/lanelo/static'
 STATIC_URL = '/static/'
+
+COMPRESS_URL = STATIC_URL
+COMPRESS_ROOT = STATIC_ROOT
+
+COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter']
 

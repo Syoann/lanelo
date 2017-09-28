@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-19 21:36+0200\n"
+"POT-Creation-Date: 2017-09-27 23:32+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,25 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: gametracker/forms.py:9
-msgid "Carte"
-msgstr "Map"
+#: lanelo/settings.py:125
+msgid "English"
+msgstr ""
 
-#: gametracker/forms.py:10
-msgid "Équipe 1"
-msgstr "Team 1"
-
-#: gametracker/forms.py:11
-msgid "Équipe 2"
-msgstr "Team 2"
-
-#: gametracker/forms.py:16
-msgid "Gagnant"
-msgstr "Winner"
-
-#: gametracker/forms.py:20
-msgid "Joueurs présents"
-msgstr "Present players"
+#: lanelo/settings.py:126
+msgid "French"
+msgstr ""
 
 #: gametracker/templates/gametracker/add_game.html:6
 msgid "Ajout d'une partie"
@@ -45,21 +33,53 @@ msgstr "Add game"
 msgid "Enregistrer"
 msgstr "Save"
 
+#: gametracker/templates/gametracker/back.html:2
+msgid "retour"
+msgstr ""
+
 #: gametracker/templates/gametracker/balance_teams.html:6
-msgid "Composition des équipes"
+#, fuzzy
+#| msgid "Composition des équipes"
+msgid "Composition des equipes"
 msgstr "Create teams"
 
 #: gametracker/templates/gametracker/balance_teams.html:13
 msgid "Valider"
 msgstr "Run"
 
-#: gametracker/templates/gametracker/balance_teams.html:16
+#: gametracker/templates/gametracker/balance_teams.html:18
 msgid "&Eacute;quipes propos&eacute;es :"
 msgstr "Proposed teams:"
 
-#: gametracker/templates/gametracker/balance_teams.html:25
+#: gametracker/templates/gametracker/balance_teams.html:27
 msgid "ou bien :"
 msgstr "or:"
+
+#: gametracker/templates/gametracker/history.html:7
+#, fuzzy
+#| msgid "Historique"
+msgid "Historique des parties"
+msgstr "History"
+
+#: gametracker/templates/gametracker/history.html:11
+msgid "Date"
+msgstr ""
+
+#: gametracker/templates/gametracker/history.html:12
+msgid "Carte"
+msgstr "Map"
+
+#: gametracker/templates/gametracker/history.html:13
+#, fuzzy
+#| msgid "Équipe 1"
+msgid "Equipes"
+msgstr "Team 1"
+
+#: gametracker/templates/gametracker/index.html:12
+#, fuzzy
+#| msgid "Classement"
+msgid "Classement actuel"
+msgstr "Ranking"
 
 #: gametracker/templates/gametracker/menu.html:6
 msgid "Joueurs"
@@ -100,3 +120,12 @@ msgstr "Elo"
 #: gametracker/templates/gametracker/ranking.html:8
 msgid "# Parties"
 msgstr "# Games"
+
+#~ msgid "Équipe 2"
+#~ msgstr "Team 2"
+
+#~ msgid "Gagnant"
+#~ msgstr "Winner"
+
+#~ msgid "Joueurs présents"
+#~ msgstr "Present players"

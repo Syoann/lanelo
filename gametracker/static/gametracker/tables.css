@@ -52,3 +52,27 @@ th {
 .lost {
     background-color: #34495e;
 }
+
+
+@media screen and (max-width: 700px) {
+    .history {
+        width: 100%;
+    }
+
+    .history > tbody > tr > td:nth-child(2),
+    .history > tbody > tr > th:nth-child(2){                                                                                                                              
+        display: none;                                                                                                                                                    
+    }
+
+    .team_composition td:nth-child(1){                                                                                                                                    
+        width: 20px;                                                                                                                                                      
+    }     
+}
+
+@media screen and (max-width: 420px) {                                                                                                                                    
+    /* Remove date column from game history */                                                                                                                            
+    .history > tbody > tr > td:nth-child(1),                                                                                                                              
+    .history > tbody > tr > th:nth-child(1){                                                                                                                              
+        display: none;                                                                                                                                                    
+    }                                                                                                                                                                     
+}
