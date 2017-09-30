@@ -9,11 +9,6 @@ h2 {
     font-family: Sans-serif;
 }
 
-/*div {
-    width: 100%;
-    display: block;
-}*/
-
 a {
     text-decoration: none;
 }
@@ -35,4 +30,10 @@ a:visited {
 
 .proposed_teams {
     text-align: center;
+}
+
+@media screen and (max-width: 700px) {
+    .introduction {
+        width: 100%;
+    }
 }

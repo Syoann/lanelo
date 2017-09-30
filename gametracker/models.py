@@ -41,21 +41,13 @@ class Team:
     """A team is a group of players. An Elo can be calculated for the team"""
     def __init__(self, players):
         self.players = players
-        self.elo = self._calc_elo()
-
-    def add_player(self, player):
-        self.players.extend(player)
-        self.elo = self._calc_elo
 
     def get_elo(self):
-        return self.elo
-
-    def _calc_elo(self):
+        """Calculate elo for the team"""
         # Multiplicative factor for multiplayer teams
         MP_FACTOR = 300
-
         elos = [p.elo for p in self.players]
-        return sum(elos) / float(len(elos)) + MP_FACTOR * math.log(len(elos), 2)
+        return float(sum(elos)) / len(self.players) + MP_FACTOR * math.log(len(self.players), 2)
 
 
 class TeamBalancer:
@@ -95,35 +87,31 @@ class EloCalculator:
         self.teams = { "team1": team1, "team2": team2 }
         self.winner = winner
 
-    def pD(self, team_name="team1"):
-        """Probability to win a game based on elo difference"""
-
-        delta = self.teams["team1"].get_elo() - self.teams["team2"].get_elo()
-        if team_name == "team2":
-            delta = -delta
-
-        return 1 / (1 + 10**(-delta/250))
+    def pW(self):
+        """Probability to win a game based on elo difference.
+           returns a tuple (p_win(team1), p_win(team2)"""
+        pw = {}
+        delta_elo = self.teams["team1"].get_elo() - self.teams["team2"].get_elo()
+        
+        pw["team1"] = 1 / (1 + 10**(-delta_elo / 250))
+        pw["team2"] = 1 / (1 + 10**(delta_elo / 250))
+        return pw
 
     def K(self, ngames):
         """Factor regulating the variation of elo points after a game"""
         if ngames >= 0 :
             return 200 / (math.sqrt(ngames) + 10) + 5 
         else:
-            return None
+            raise ValueError("The number of games is a negative number !", ngames)
+
+    def _team_elo_var(self, team_name):
+        """Game component of the variation of elo"""
+        return int(self.winner == team_name) - self.pW()[team_name]
 
     def new_elo(self, player):
         if player in self.teams["team1"].players:
-            return player.elo + self.K(player.ngames) * (int(self.winner == "team1") - self.pD("team1"))
+            return player.elo + self.K(player.ngames) * self._team_elo_var("team1")
         elif player in self.teams["team2"].players:
-            return player.elo + self.K(player.ngames) * (int(self.winner == "team2") - self.pD("team2"))
+            return player.elo + self.K(player.ngames) * self._team_elo_var("team2")
         else:
-            return None
-
-    def calc(self):
-        players = []
-        for team_name, team in self.teams.item():
-            for player in team:
-                new_elo = player.elo + self.K(player.ngames) * (int(self.winner == team_name) - self.pD(team_name))
-                players.append(Player(player.name, player.firstname, player.lastname, player.ngames+1, new_elo))
-
-        return players
+            raise ValueError("The player is not part of team1 nor team2 !", player)

@@ -24,7 +24,7 @@ with open('/etc/secret_key_lanelo.txt') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True 
 
 ALLOWED_HOSTS = [u'192.168.0.14', u'lanelo.servyo.fr', u'www.lanelo.servyo.fr']
 

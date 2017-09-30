@@ -17,18 +17,18 @@
 <div class="proposed_teams">
     <h3>{% trans "&Eacute;quipes propos&eacute;es :" %}</h3>
 
-    <p>{{ team1.players|join_by_attr:"name" }} ({{ team1.elo|floatformat:"0" }})<br />
+    <p>{{ team1.players|join_by_attr:"name" }} ({{ team1.get_elo|floatformat:"0" }}) [{{pw_team1|floatformat:"0"}}%] <br />
        vs.<br />
-       {{ team2.players|join_by_attr:"name" }} ({{ team2.elo|floatformat:"0" }})
+       {{ team2.players|join_by_attr:"name" }} ({{ team2.get_elo|floatformat:"0" }}) [{{pw_team2|floatformat:"0"}}%]
     </p>
 
     {% if not team1eq is None and not team2eq is None %}
 
     <p>{% trans "ou bien :" %}</b>
 
-    <p>{{ team1eq.players|join_by_attr:"name" }} ({{ team1eq.elo|floatformat:"0" }})<br />
+    <p>{{ team1eq.players|join_by_attr:"name" }} ({{ team1eq.get_elo|floatformat:"0" }})<br />
         vs.<br />
-       {{ team2eq.players|join_by_attr:"name" }} ({{ team2eq.elo|floatformat:"0" }})
+       {{ team2eq.players|join_by_attr:"name" }} ({{ team2eq.get_elo|floatformat:"0" }})
     </p>
     {% endif %}
 </div>

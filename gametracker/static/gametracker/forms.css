@@ -33,24 +33,7 @@ select {
 }
 
 @media screen and (max-width: 700px) {
-    .introduction {
-        width: 100%;
-    }
-        
-    .player_list, .history {
-        width: 100%;
-    }
-
-    .history > tbody > tr > td:nth-child(2),
-    .history > tbody > tr > th:nth-child(2){
-        display: none;
-    }
-
-    .team_composition td:nth-child(1){
-        width: 20px;
-    }
-
     #id_players {
-        height: 25px;
+        height: 30px;
     }
 }

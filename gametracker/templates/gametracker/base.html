@@ -1,5 +1,6 @@
 {% load static %}
 {% load compress %}
+{% load i18n %}
 
 <!doctype html>
 
@@ -14,6 +15,8 @@
         <link rel="stylesheet" type="text/css" href="{% static 'gametracker/forms.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'gametracker/tables.css' %}" />
         {% endcompress %}
+        <link rel="icon" type="image/png" href="/favicon.ico" />
+        <meta name='description' content='Suivi des parties et classement des joueurs sur Age of Empires II'>
     </head>
 
     <body>

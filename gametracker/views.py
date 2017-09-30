@@ -35,8 +35,15 @@ def balance_teams(request):
         if form.is_valid():
             team_balancer = TeamBalancer(form.cleaned_data["players"])
 
+            balance_result = team_balancer.balance()
+
             context = {'form': form}
-            context.update(team_balancer.balance())
+            context.update(balance_result)
+
+            # Add winning probability for teams
+            elo_calc = EloCalculator(balance_result["team1"], balance_result["team2"])
+            pw = elo_calc.pW()
+            context.update({"pw_team1": pw["team1"] * 100, "pw_team2": pw["team2"] * 100})
 
             return render(request, "gametracker/balance_teams.html", context)
     else:

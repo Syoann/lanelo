@@ -55,22 +55,22 @@ class GameTest(TestCase):
         self.assertEqual(round(elo_team1, 0), 2400)
         self.assertEqual(round(elo_team2, 0), 2325)
 
-    def test_pD(self):
+    def test_pW(self):
         """Test probabilité de gagner (positif)"""
         elo_calc = EloCalculator(Team([self.p1, self.p2, self.p5, self.p8]),
                                  Team([self.p3, self.p4, self.p6, self.p7]))
 
-        self.assertEqual(round(elo_calc.pD("team1")*100, 2), 66.61)
-        self.assertEqual(round(elo_calc.pD("team2")*100, 2), 100-66.61)
+        self.assertEqual(round(elo_calc.pW()["team1"]*100, 2), 66.61)
+        self.assertEqual(round(elo_calc.pW()["team2"]*100, 2), 100-66.61)
 
 
-    def test_pD_under50(self):
+    def test_pW_under50(self):
         """Test probabilité de gagner (négatif)"""
         elo_calc = EloCalculator(Team([self.p1, self.p2, self.p7, self.p8]),
                                  Team([self.p3, self.p4, self.p5, self.p6]))
 
-        self.assertEqual(round(elo_calc.pD("team1")*100, 2), 1.24)
-        self.assertEqual(round(elo_calc.pD("team2")*100, 2), 100-1.24)
+        self.assertEqual(round(elo_calc.pW()["team1"]*100, 2), 1.24)
+        self.assertEqual(round(elo_calc.pW()["team2"]*100, 2), 100-1.24)
 
     def test_K(self):
         elo_calc = EloCalculator(Team([self.p1]), Team([self.p2]))
@@ -81,7 +81,7 @@ class GameTest(TestCase):
 
     def test_K_none(self):
         elo_calc = EloCalculator(Team([self.p1]), Team([self.p2]))
-        self.assertEqual(elo_calc.K(-1), None)
+        self.assertRaises(ValueError, elo_calc.K, -1)
 
     def test_new_elo(self):
         elo_calc = EloCalculator(Team([self.p1]), Team([self.p3]), winner="team1")

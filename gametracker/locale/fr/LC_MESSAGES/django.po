@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-28 15:20+0200\n"
+"POT-Creation-Date: 2017-09-28 16:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,6 +25,32 @@ msgstr "Anglais"
 #: lanelo/settings.py:126
 msgid "French"
 msgstr "Français"
+
+#: gametracker/forms.py:9 gametracker/templates/gametracker/history.html:12
+msgid "Carte"
+msgstr "Carte"
+
+#: gametracker/forms.py:10
+#, fuzzy
+#| msgid "Equipes"
+msgid "Equipe 1"
+msgstr "&Eacute;quipes 1"
+
+#: gametracker/forms.py:11
+#, fuzzy
+#| msgid "Equipes"
+msgid "Equipe 2"
+msgstr "&Eacute;quipe 2"
+
+#: gametracker/forms.py:16
+msgid "Gagnant"
+msgstr "Gagnant"
+
+#: gametracker/forms.py:20
+#, fuzzy
+#| msgid "Joueurs"
+msgid "Joueurs presents"
+msgstr "Joueurs présents"
 
 #: gametracker/templates/gametracker/add_game.html:6
 msgid "Ajout d'une partie"
@@ -57,10 +83,6 @@ msgstr "Historique des parties"
 #: gametracker/templates/gametracker/history.html:11
 msgid "Date"
 msgstr "Date"
-
-#: gametracker/templates/gametracker/history.html:12
-msgid "Carte"
-msgstr "Carte"
 
 #: gametracker/templates/gametracker/history.html:13
 msgid "Equipes"
