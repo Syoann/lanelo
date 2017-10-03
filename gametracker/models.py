@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 import math
 import itertools
 
-# Create your models here.
+from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
+
+from utils import *
 
 @python_2_unicode_compatible
 class Player(models.Model):
@@ -14,14 +15,25 @@ class Player(models.Model):
     lastname = models.CharField(max_length=50, default=None, blank=True)
     ngames = models.PositiveIntegerField(default=0)
     elo = models.PositiveIntegerField(default=1400)
+
     def __str__(self):
         return self.name
+
+    def _k(self):
+        """Factor regulating the variation of elo points after a game"""
+        if self.ngames >= 0:
+            return 200 / (math.sqrt(self.ngames) + 10) + 5
+        else:
+            raise ValueError("The number of games is a negative number !", self.ngames)
+
 
 @python_2_unicode_compatible
 class GameMap(models.Model):
     name = models.CharField(max_length=50)
+
     def __str__(self):
         return self.name
+
 
 @python_2_unicode_compatible
 class Game(models.Model):
@@ -29,25 +41,13 @@ class Game(models.Model):
     game_map = models.ForeignKey('GameMap', on_delete=models.PROTECT, null=True, blank=True)
     team1 = models.ManyToManyField('Player', related_name="team1")
     team2 = models.ManyToManyField('Player', related_name="team2")
-    winner = models.CharField(max_length=20, choices=[("team1", "Équipe 1"), ("team2", "Équipe 2")], default="team1")
+    winner = models.CharField(max_length=20, choices=[("team1", "Équipe 1"),
+                                                      ("team2", "Équipe 2")],
+                              default="team1")
+
     def __str__(self):
         return str(self.date)
 
-    def update_elo(self):
-        elo_calc = EloCalculator(Team(self.team1), Team(self.team2), self.winner)
-        return elo_calc.calc()       
- 
-class Team:
-    """A team is a group of players. An Elo can be calculated for the team"""
-    def __init__(self, players):
-        self.players = players
-
-    def get_elo(self):
-        """Calculate elo for the team"""
-        # Multiplicative factor for multiplayer teams
-        MP_FACTOR = 300
-        elos = [p.elo for p in self.players]
-        return float(sum(elos)) / len(self.players) + MP_FACTOR * math.log(len(self.players), 2)
 
 
 class TeamBalancer:
@@ -57,17 +57,18 @@ class TeamBalancer:
         self.result = {"team1": None, "team2": None, "team1eq": None, "team2eq": None}
 
     def balance(self):
-        min_delta = None;
-        min_delta_eq = None;
+        min_delta = None
+        min_delta_eq = None
 
-        # For all combinations of players in 2 teams, compare elo and save teams with minimum elo difference
-        # Moreover, retain teams with even number of players and minimum elo difference
+        # For all combinations of players in 2 teams, compare elo
+        # and save teams with minimum elo difference.
+        # Additionaly, retain teams with even number of players and minimum elo difference
         for size in xrange(1, len(self.players) / 2 + 1):
             for players_list in itertools.combinations(self.players, size):
-                team1 = Team(players_list)
-                team2 = Team(tuple(set(self.players) - set(players_list)))
+                team1 = players_list
+                team2 = tuple(set(self.players) - set(players_list))
 
-                diff = abs(team1.get_elo() - team2.get_elo())
+                diff = abs(calculate_team_elo(team1) - calculate_team_elo(team2))
 
                 if diff < min_delta or min_delta is None:
                     (self.result["team1"], self.result["team2"]) = (team1, team2)
@@ -77,41 +78,45 @@ class TeamBalancer:
                     (self.result["team1eq"], self.result["team2eq"]) = (team1, team2)
                     min_delta_eq = diff
 
-        if set([self.result["team1eq"], self.result["team2eq"]]) == set([self.result["team1"], self.result["team2"]]):
+        # Do not output twice the same set of teams
+        teams = set([self.result["team1"], self.result["team2"]])
+        teams_eq = set([self.result["team1eq"], self.result["team2eq"]])
+
+        if teams_eq == teams:
             (self.result["team1eq"], self.result["team2eq"]) = (None, None)
 
         return self.result
 
-class EloCalculator:
-    def __init__(self, team1, team2, winner="team1"):
-        self.teams = { "team1": team1, "team2": team2 }
-        self.winner = winner
 
-    def pW(self):
-        """Probability to win a game based on elo difference.
-           returns a tuple (p_win(team1), p_win(team2)"""
-        pw = {}
-        delta_elo = self.teams["team1"].get_elo() - self.teams["team2"].get_elo()
-        
-        pw["team1"] = 1 / (1 + 10**(-delta_elo / 250))
-        pw["team2"] = 1 / (1 + 10**(delta_elo / 250))
-        return pw
+class PlayerGameStats(object):
+    """Calculate and store statistics of a player in a game"""
+    def __init__(self, player, game):
+        self.player = player
+        self.game = game
 
-    def K(self, ngames):
-        """Factor regulating the variation of elo points after a game"""
-        if ngames >= 0 :
-            return 200 / (math.sqrt(ngames) + 10) + 5 
+        self.team = None
+        self.ennemy_team = None
+        self.won = False
+
+        # Check the team and the result here instead of checking it in every method
+        if self.player in self.game.team1.all():
+            self.team = self.game.team1.all()
+            self.ennemy_team = self.game.team2.all()
+            if self.game.winner == "team1":
+                self.won = True
+        elif self.player in self.game.team2.all():
+            self.team = self.game.team2.all()
+            self.ennemy_team = self.game.team1.all()
+            if self.game.winner == "team2":
+                self.won = True
         else:
-            raise ValueError("The number of games is a negative number !", ngames)
+            raise ValueError('Player is not in team1 nor in team2 of this game !', self.player)
 
-    def _team_elo_var(self, team_name):
-        """Game component of the variation of elo"""
-        return int(self.winner == team_name) - self.pW()[team_name]
+    def get_elo_after(self):
+        """Returns elo rating of the player after the game"""
+        return self.player.elo + self.get_elo_var()
 
-    def new_elo(self, player):
-        if player in self.teams["team1"].players:
-            return player.elo + self.K(player.ngames) * self._team_elo_var("team1")
-        elif player in self.teams["team2"].players:
-            return player.elo + self.K(player.ngames) * self._team_elo_var("team2")
-        else:
-            raise ValueError("The player is not part of team1 nor team2 !", player)
+    def get_elo_var(self):
+        """Elo rating variation after this match"""
+        delta_elo = calculate_team_elo(self.team) - calculate_team_elo(self.ennemy_team)
+        return self.player._k() * (int(self.won) - prob_winning(delta_elo))
