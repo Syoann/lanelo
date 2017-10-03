@@ -6,8 +6,9 @@ from django.shortcuts import redirect, render
 from django.views import generic
 from django.utils import timezone
 
-from .models import Game, GameMap, Player, TeamBalancer, PlayerGameStats, prob_winning
+from .models import Game, GameMap, Player, TeamBalancer, PlayerGameStats
 from .forms import GameForm, TeamsForm
+from utils import calculate_team_elo, prob_winning
 
 
 # Create your views here.
@@ -40,11 +41,15 @@ def balance_teams(request):
 
             teams = team_balancer.get_teams()
             context = {'form': form}
-            context.update({'team1': teams[0], 'team2': teams[1]})
+            context.update({'team1': teams[0], 'team2': teams[1],
+                            'elo_team1': calculate_team_elo(teams[0]),
+                            'elo_team2': calculate_team_elo(teams[1])})
 
             teams_eq = team_balancer.get_balanced_teams()
             if teams_eq[0] not in teams:
-                context.update({'team1eq': teams_eq[0], 'team2eq': teams_eq[1]})
+                context.update({'team1eq': teams_eq[0], 'team2eq': teams_eq[1],
+                                'elo_team1eq': calculate_team_elo(teams_eq[0]),
+                                'elo_team2eq': calculate_team_elo(teams_eq[1])})
 
             # Add winning probability for teams
             delta_elo = calculate_team_elo(teams[0]) - calculate_team_elo(teams[1])
