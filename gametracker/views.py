@@ -38,13 +38,16 @@ def balance_teams(request):
         if form.is_valid():
             team_balancer = TeamBalancer(form.cleaned_data["players"])
 
-            balance_result = team_balancer.balance()
-
+            teams = team_balancer.get_teams()
             context = {'form': form}
-            context.update(balance_result)
+            context.update({'team1': teams[0], 'team2': teams[1]})
+
+            teams_eq = team_balancer.get_balanced_teams()
+            if teams_eq[0] not in teams:
+                context.update({'team1eq': teams_eq[0], 'team2eq': teams_eq[1]})
 
             # Add winning probability for teams
-            delta_elo = balance_result["team1"].get_elo() - balance_result["team2"].get_elo()
+            delta_elo = calculate_team_elo(teams[0]) - calculate_team_elo(teams[1])
             pw = prob_winning(delta_elo) * 100
             context.update({"pw_team1": pw,
                             "pw_team2": 100 - pw})

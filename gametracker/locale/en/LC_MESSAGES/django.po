@@ -111,7 +111,7 @@ msgstr "Ranking"
 #, fuzzy
 #| msgid "# Parties"
 msgid "Parties"
-msgstr "# Games"
+msgstr "Games"
 
 #: gametracker/templates/gametracker/menu.html:14
 msgid "Historique"

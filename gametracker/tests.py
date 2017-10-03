@@ -32,6 +32,21 @@ class GameTest(TestCase):
                                                                  self.players[4],
                                                                  self.players[5]))
 
+    def test_str_gamemap(self):
+        names = ("Arabia", "")
+
+        for name in names:
+            gmap = GameMap.objects.create(name=name)
+            self.assertEqual(str(gmap), name)
+
+    def test_str_player(self):
+        player = factories.PlayerFactory(name="Foo")
+        self.assertEqual(str(player), "Foo")
+
+    def test_str_game(self):
+        dt = timezone.now()
+        self.assertEqual(str(factories.GameFactory.create(date=dt)), str(dt))
+
     def test_team_elo_1v1(self):
         """Test du calcul de l'elo de l'équipe. Cas basiques"""
         elo_team1 = calculate_team_elo([self.players[0]])
@@ -59,9 +74,9 @@ class GameTest(TestCase):
     def test_team_elo_4v4(self):
         """Test du calcul de l'elo de l'équipe. Cas basiques"""
         elo_team1 = calculate_team_elo([self.players[0], self.players[1],
-                          self.players[4], self.players[7]])
+                                        self.players[4], self.players[7]])
         elo_team2 = calculate_team_elo([self.players[2], self.players[3],
-                          self.players[5], self.players[6]])
+                                        self.players[5], self.players[6]])
 
         self.assertEqual(round(elo_team1, 0), 2400)
         self.assertEqual(round(elo_team2, 0), 2325)
@@ -99,7 +114,17 @@ class GameTest(TestCase):
         player.ngames = -1
         self.assertRaises(ValueError, player._k)
 
-    def test_new_elo(self):
+    def test_player_game_stats(self):
+        """Teste l'instanciation de la classe PlayerGameStats"""
+        game = factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[2]])
+        self.assertRaises(ValueError, PlayerGameStats, self.players[1], game)
+
+        pgs = PlayerGameStats(self.players[0], game)
+        self.assertEqual(pgs.won, True)
+        self.assertEqual(pgs.team[0].name, self.players[0].name)
+        self.assertEqual(pgs.ennemy_team[0].name, self.players[2].name)
+
+    def test_get_elo_after(self):
         game = factories.GameFactory.create(team1=(self.players[0],),
                                             team2=(self.players[2],), winner="team1")
         p1_stats = PlayerGameStats(self.players[0], game)
@@ -116,6 +141,7 @@ class GameTest(TestCase):
         self.assertEqual(round(p1_stats.get_elo_after(), 0), 1993)
         self.assertEqual(round(p2_stats.get_elo_after(), 0), 2107)
 
+    # Integration tests
     def test_multiple_games(self):
         """Test que gagner en étant équipe 1 ou 2 n'a pas d'importance"""
         player1 = self.players[0]
@@ -189,7 +215,25 @@ class GameTest(TestCase):
         players = [factories.PlayerFactory(elo=elo) for elo in elos]
 
         team_balancer = TeamBalancer([players[0], players[1], players[2], players[3]])
-        teams = team_balancer.balance()
+        teams = team_balancer.get_teams()
 
-        self.assertEqual((players[0], players[3]), teams["team1"])
-        self.assertEqual((players[1], players[2]), teams["team2"])
+        self.assertEqual([players[0], players[3]], teams[0])
+        self.assertEqual([players[1], players[2]], teams[1])
+
+        bteams = team_balancer.get_balanced_teams()
+
+        self.assertEqual(teams, bteams)
+
+
+# Test views
+from django.test import Client
+
+
+class TestViews(TestCase):
+    def test_pages(self):
+        pages = ('', '/index', '/games', '/addgame', '/players', '/teams')
+        c = Client()
+
+        for page in pages:
+            response = c.get(page)
+            self.assertEqual(response.status_code, 200)

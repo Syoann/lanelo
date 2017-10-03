@@ -8,6 +8,7 @@ from django.utils.encoding import python_2_unicode_compatible
 
 from utils import *
 
+
 @python_2_unicode_compatible
 class Player(models.Model):
     name = models.CharField(max_length=50)
@@ -41,51 +42,53 @@ class Game(models.Model):
     game_map = models.ForeignKey('GameMap', on_delete=models.PROTECT, null=True, blank=True)
     team1 = models.ManyToManyField('Player', related_name="team1")
     team2 = models.ManyToManyField('Player', related_name="team2")
-    winner = models.CharField(max_length=20, choices=[("team1", "Équipe 1"),
-                                                      ("team2", "Équipe 2")],
-                              default="team1")
+    winner = models.CharField(max_length=20, default="team1", choices=[("team1", "Équipe 1"),
+                                                                       ("team2", "Équipe 2")])
 
     def __str__(self):
         return str(self.date)
-
 
 
 class TeamBalancer:
     """Create two balanced teams from a list of players"""
     def __init__(self, players):
         self.players = players
-        self.result = {"team1": None, "team2": None, "team1eq": None, "team2eq": None}
 
-    def balance(self):
+    def __partition_players(self, size):
+        """Split players in two teams: one of size 'size' and the other of size N - 'size'"""
         min_delta = None
-        min_delta_eq = None
+        teams = []
 
+        for players in itertools.combinations(self.players, size):
+            team1 = list(set(players))
+            team2 = list(set(self.players) - set(players))
+
+            diff = abs(calculate_team_elo(team1) - calculate_team_elo(team2))
+
+            if diff < min_delta or min_delta is None:
+                teams = [team1, team2]
+                min_delta = diff
+
+        return teams
+
+    def get_teams(self):
+        min_delta = None
+        balanced_teams = None
         # For all combinations of players in 2 teams, compare elo
         # and save teams with minimum elo difference.
-        # Additionaly, retain teams with even number of players and minimum elo difference
         for size in xrange(1, len(self.players) / 2 + 1):
-            for players_list in itertools.combinations(self.players, size):
-                team1 = players_list
-                team2 = tuple(set(self.players) - set(players_list))
+            teams = self.__partition_players(size)
+            min_d = abs(calculate_team_elo(teams[0]) - calculate_team_elo(teams[1]))
 
-                diff = abs(calculate_team_elo(team1) - calculate_team_elo(team2))
+            if min_d < min_delta or min_delta is None:
+                min_delta = min_d
+                balanced_teams = teams
 
-                if diff < min_delta or min_delta is None:
-                    (self.result["team1"], self.result["team2"]) = (team1, team2)
-                    min_delta = diff
+        return balanced_teams
 
-                if size >= len(self.players) / 2 and (diff < min_delta_eq or min_delta_eq is None):
-                    (self.result["team1eq"], self.result["team2eq"]) = (team1, team2)
-                    min_delta_eq = diff
+    def get_balanced_teams(self):
+        return self.__partition_players(len(self.players) // 2)
 
-        # Do not output twice the same set of teams
-        teams = set([self.result["team1"], self.result["team2"]])
-        teams_eq = set([self.result["team1eq"], self.result["team2eq"]])
-
-        if teams_eq == teams:
-            (self.result["team1eq"], self.result["team2eq"]) = (None, None)
-
-        return self.result
 
 
 class PlayerGameStats(object):
