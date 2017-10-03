@@ -36,7 +36,7 @@ def balance_teams(request):
     if request.method == "POST":
         form = TeamsForm(request.POST)
 
-        if form.is_valid():
+        if form.is_valid() and len(form.cleaned_data["players"]) > 1:
             team_balancer = TeamBalancer(form.cleaned_data["players"])
 
             teams = team_balancer.get_teams()
@@ -58,13 +58,11 @@ def balance_teams(request):
                             "pw_team2": 100 - pw})
 
             return render(request, "gametracker/balance_teams.html", context)
+        else:
+            return render(request, "gametracker/balance_teams.html", {'form': form})
     else:
         form = TeamsForm()
         return render(request, "gametracker/balance_teams.html", {'form': form})
-
-    def form_valid(self, form):
-        return True
-
 
 def add_game(request):
     """Add a new game in the database"""

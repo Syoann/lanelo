@@ -231,9 +231,21 @@ from django.test import Client
 
 class TestViews(TestCase):
     def test_pages(self):
+        """Test that all pages are available"""
         pages = ('', '/index', '/games', '/addgame', '/players', '/teams')
         c = Client()
 
         for page in pages:
             response = c.get(page)
             self.assertEqual(response.status_code, 200)
+
+    def test_team_balancing_page(self):
+        """Test that team balancing return code after form completion is 200"""
+        c = Client()
+        player1 = factories.PlayerFactory(elo=2000)
+        player2 = factories.PlayerFactory(elo=2000)
+
+        response = c.post("/teams", {'players': [player1.pk, player2.pk]})
+        response = c.post("/teams", {'players': [player1.pk]})
+
+        self.assertEqual(response.status_code, 200)

@@ -22,4 +22,4 @@ class GameForm(forms.ModelForm):
 
 class TeamsForm(forms.Form):
     players = forms.ModelMultipleChoiceField(queryset=Player.objects.order_by('-elo'),
-                                             label=_(u"Joueurs presents"))
+                                             label=_(u"Joueurs présents"))
