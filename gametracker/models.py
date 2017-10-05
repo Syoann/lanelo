@@ -6,7 +6,7 @@ import itertools
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 
-from utils import *
+from utils import calculate_team_elo, prob_winning
 
 
 @python_2_unicode_compatible
@@ -76,7 +76,7 @@ class TeamBalancer:
         balanced_teams = None
         # For all combinations of players in 2 teams, compare elo
         # and save teams with minimum elo difference.
-        for size in xrange(1, len(self.players) / 2 + 1):
+        for size in range(1, len(self.players) / 2 + 1):
             teams = self.__partition_players(size)
             min_d = abs(calculate_team_elo(teams[0]) - calculate_team_elo(teams[1]))
 
@@ -88,7 +88,6 @@ class TeamBalancer:
 
     def get_balanced_teams(self):
         return self.__partition_players(len(self.players) // 2)
-
 
 
 class PlayerGameStats(object):

@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import random
 import factory
 from django.utils import timezone
 
@@ -17,6 +16,13 @@ class PlayerFactory(factory.DjangoModelFactory):
     name = factory.LazyAttribute(lambda a: '{0}{1}'.format(a.firstname[:1], a.lastname).lower())
     ngames = 0
     elo = 1500
+
+
+class GameMapFactory(factory.DjangoModelFactory):
+    class Meta:
+        model = models.GameMap
+
+    name = 'Arabia'
 
 
 class GameFactory(factory.DjangoModelFactory):

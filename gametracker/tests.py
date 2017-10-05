@@ -3,10 +3,12 @@ from __future__ import unicode_literals
 
 from django.test import TestCase
 from django.utils import timezone
+from django.urls import reverse
+from django.test import Client
 
-from models import Game, Player, PlayerGameStats, GameMap, prob_winning, calculate_team_elo
+from models import PlayerGameStats
 from views import TeamBalancer
-from utils import *
+from utils import calculate_team_elo, prob_winning
 from . import factories
 
 
@@ -15,28 +17,11 @@ class GameTest(TestCase):
         elos = [2000, 1500, 2100, 1900, 2500, 1500, 1400, 1200]
         self.players = [factories.PlayerFactory(elo=elo) for elo in elos]
 
-        self.game_test_pw = factories.GameFactory.create(team1=(self.players[0],
-                                                                self.players[1],
-                                                                self.players[4],
-                                                                self.players[7]),
-                                                         team2=(self.players[2],
-                                                                self.players[3],
-                                                                self.players[5],
-                                                                self.players[6]))
-        self.game_test_pw2 = factories.GameFactory.create(team1=(self.players[0],
-                                                                 self.players[1],
-                                                                 self.players[6],
-                                                                 self.players[7]),
-                                                          team2=(self.players[2],
-                                                                 self.players[3],
-                                                                 self.players[4],
-                                                                 self.players[5]))
-
     def test_str_gamemap(self):
         names = ("Arabia", "")
 
         for name in names:
-            gmap = GameMap.objects.create(name=name)
+            gmap = factories.GameMapFactory.create(name=name)
             self.assertEqual(str(gmap), name)
 
     def test_str_player(self):
@@ -83,16 +68,16 @@ class GameTest(TestCase):
 
     def test_prob_winning(self):
         """Test probabilité de gagner (positif)"""
-        team1 = self.game_test_pw.team1.all()
-        team2 = self.game_test_pw.team2.all()
+        team1 = [self.players[0], self.players[1], self.players[4], self.players[7]]
+        team2 = [self.players[2], self.players[3], self.players[5], self.players[6]]
 
         self.assertEqual(round(prob_winning(calculate_team_elo(team1) - calculate_team_elo(team2)) * 100, 2), 66.61)
         self.assertEqual(round(prob_winning(calculate_team_elo(team2) - calculate_team_elo(team1)) * 100, 2), 33.39)
 
     def test_prob_winnng_under50(self):
         """Test probabilité de gagner (négatif)"""
-        team1 = self.game_test_pw2.team1.all()
-        team2 = self.game_test_pw2.team2.all()
+        team1 = [self.players[0], self.players[1], self.players[6], self.players[7]]
+        team2 = [self.players[2], self.players[3], self.players[4], self.players[5]]
 
         # Probability is the same for everyone in the team
         self.assertEqual(round(prob_winning(calculate_team_elo(team1) - calculate_team_elo(team2)) * 100, 2), 1.24)
@@ -226,9 +211,6 @@ class GameTest(TestCase):
 
 
 # Test views
-from django.test import Client
-
-
 class TestViews(TestCase):
     def test_pages(self):
         """Test that all pages are available"""
@@ -245,7 +227,33 @@ class TestViews(TestCase):
         player1 = factories.PlayerFactory(elo=2000)
         player2 = factories.PlayerFactory(elo=2000)
 
-        response = c.post("/teams", {'players': [player1.pk, player2.pk]})
-        response = c.post("/teams", {'players': [player1.pk]})
-
+        response = c.post(reverse('gametracker:balance_teams'), {'players': [player1.pk, player2.pk]})
         self.assertEqual(response.status_code, 200)
+
+        response = c.post(reverse('gametracker:balance_teams'), {'players': [player1.pk]})
+        self.assertEqual(response.status_code, 200)
+
+    def test_team_full_balancing_page(self):
+        """Test that team balancing return code after form completion is 200"""
+        c = Client()
+        player1 = factories.PlayerFactory(elo=2000)
+        player2 = factories.PlayerFactory(elo=2000)
+
+        response = c.post(reverse('gametracker:balance_teams'), {'players': [player1.pk, player2.pk]})
+        self.assertEqual(response.status_code, 200)
+
+        response = c.post(reverse('gametracker:balance_teams'), {'players': [player1.pk]})
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_game_page(self):
+        """Test that the game insertion is working"""
+        c = Client()
+        game_map = factories.GameMapFactory.create()
+
+        player1 = factories.PlayerFactory(elo=2050)
+        player2 = factories.PlayerFactory(elo=2000)
+
+        response = c.post(reverse('gametracker:add_game'), {'game_map': game_map.pk, 'team1': [player1.pk],
+                          'team2': [player2.pk], 'winner': 'team1'}, follow=True)
+
+        self.assertRedirects(response, reverse('gametracker:history'))

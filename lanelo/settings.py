@@ -24,7 +24,7 @@ with open('/etc/secret_key_lanelo.txt') as f:
     SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = True
 
 ALLOWED_HOSTS = [u'192.168.0.14', u'lanelo.servyo.fr', u'www.lanelo.servyo.fr']
 
@@ -136,7 +136,10 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-gettext = lambda x: x
+
+def gettext(x):
+    return x
+
 
 LANGUAGES = (
    ('en', gettext('English')),
@@ -164,4 +167,3 @@ COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
 
 COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter']
-

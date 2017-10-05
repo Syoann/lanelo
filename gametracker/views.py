@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.views import generic
 from django.utils import timezone
+from django.urls import reverse
 
-from .models import Game, GameMap, Player, TeamBalancer, PlayerGameStats
+from .models import Game, Player, TeamBalancer, PlayerGameStats
 from .forms import GameForm, TeamsForm
 from utils import calculate_team_elo, prob_winning
 
@@ -64,6 +64,7 @@ def balance_teams(request):
         form = TeamsForm()
         return render(request, "gametracker/balance_teams.html", {'form': form})
 
+
 def add_game(request):
     """Add a new game in the database"""
     if request.method == "POST":
@@ -76,13 +77,13 @@ def add_game(request):
             form.save_m2m()
 
             # Update players
-            for player in game.team1.all() + game.team2.all():
+            for player in list(game.team1.all()) + list(game.team2.all()):
                 player_game_stats = PlayerGameStats(player, game)
                 player.ngames += 1
                 player.elo = player_game_stats.get_elo_after()
                 player.save()
 
-            return redirect('/gametracker/games')
+            return redirect(reverse('gametracker:history'))
     else:
         form = GameForm()
-    return render(request, "gametracker/add_game.html", {'form': form})
+    return render(request, 'gametracker/add_game.html', {'form': form})
