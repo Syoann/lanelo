@@ -19,31 +19,31 @@
             <td>
                 <table class="team_composition">
                     <tr>
-                    <!-- Team 1: winner or loser ? -->
-                    {% if game.winner == "team1" %}
                         <td class='won'>W</td>
-                    {% else %}
-                        <td class="lost">L</td>
-                    {% endif %}
-
-                    <!-- Team 1 composition -->
-                    {% for player in game.team1.all %}
-                        <td>{{ player.name }}</td>
-                    {% endfor %}
+                        <!-- Winner team first -->
+                        {% if game.winner == "team1" %}
+                            {% for player in game.team1.all %}
+                                <td>{{ player.name }}</td>
+                            {% endfor %}
+                        {% else %}
+                            {% for player in game.team2.all %}
+                                <td>{{ player.name }}</td>
+                            {% endfor %}
+                        {% endif %}
                     </tr>
 
-                    <! -- Team 2: winner or loser ? -->
+                    <!-- Loser team -->
                     <tr>
-                    {% if game.winner == "team2" %}
-                        <td class='won'>W</td>
-                    {% else %}
                         <td class="lost">L</td>
-                    {% endif %}
-
-                    <!-- Team 2 composition -->
-                    {% for player in game.team2.all %}
-                        <td>{{ player.name }}</td>
-                    {% endfor %}
+                        {% if game.winner == "team2" %}
+                            {% for player in game.team1.all %}
+                                <td>{{ player.name }}</td>
+                            {% endfor %}
+                        {% else %}
+                            {% for player in game.team2.all %}
+                                <td>{{ player.name }}</td>
+                            {% endfor %}
+                        {% endif %}
                     </tr>
                 </table>
             </td>
