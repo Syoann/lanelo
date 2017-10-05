@@ -237,12 +237,15 @@ class TestViews(TestCase):
         """Test that team balancing return code after form completion is 200"""
         c = Client()
         player1 = factories.PlayerFactory(elo=2000)
-        player2 = factories.PlayerFactory(elo=2000)
+        player2 = factories.PlayerFactory(elo=1500)
+        player3 = factories.PlayerFactory(elo=1300)
+        player4 = factories.PlayerFactory(elo=1300)
+        player5 = factories.PlayerFactory(elo=1200)
+        player6 = factories.PlayerFactory(elo=1200)
 
-        response = c.post(reverse('gametracker:balance_teams'), {'players': [player1.pk, player2.pk]})
-        self.assertEqual(response.status_code, 200)
-
-        response = c.post(reverse('gametracker:balance_teams'), {'players': [player1.pk]})
+        response = c.post(reverse('gametracker:balance_teams'),
+                          {'players': [player1.pk, player2.pk, player3.pk,
+                                       player4.pk, player5.pk, player6.pk]})
         self.assertEqual(response.status_code, 200)
 
     def test_add_game_page(self):
