@@ -16,6 +16,7 @@ class Player(models.Model):
     lastname = models.CharField(max_length=50, default=None, blank=True)
     ngames = models.PositiveIntegerField(default=0)
     elo = models.PositiveIntegerField(default=1400)
+    init_elo = models.PositiveIntegerField(default=1400)
 
     def __str__(self):
         return self.name
@@ -26,6 +27,12 @@ class Player(models.Model):
             return 200 / (math.sqrt(self.ngames) + 10) + 5
         else:
             raise ValueError("The number of games is a negative number !", self.ngames)
+
+    def play(self, game):
+        """Play a game"""
+        won = int(self in game.winners())
+        self.elo += self._k() * (won - prob_winning(game.delta_elo(self)))
+        self.ngames += 1
 
 
 @python_2_unicode_compatible
@@ -44,9 +51,22 @@ class Game(models.Model):
     team2 = models.ManyToManyField('Player', related_name="team2")
     winner = models.CharField(max_length=20, default="team1", choices=[("team1", "Équipe 1"),
                                                                        ("team2", "Équipe 2")])
-
     def __str__(self):
         return str(self.date)
+
+    def winners(self):
+        if self.winner == "team1":
+            return self.team1.all()
+        elif self.winner == "team2":
+            return self.team2.all()
+        else:
+            raise(ValueError, 'Neither team1 nor team2 won the game!')
+
+    def delta_elo(self, player=None):
+        if player is None or player in self.team1.all():
+            return calculate_team_elo(self.team1.all()) - calculate_team_elo(self.team2.all())
+        elif player in self.team2.all():
+            return calculate_team_elo(self.team2.all()) - calculate_team_elo(self.team1.all())
 
 
 class TeamBalancer:
@@ -88,37 +108,3 @@ class TeamBalancer:
 
     def get_balanced_teams(self):
         return self.__partition_players(len(self.players) // 2)
-
-
-class PlayerGameStats(object):
-    """Calculate and store statistics of a player in a game"""
-    def __init__(self, player, game):
-        self.player = player
-        self.game = game
-
-        self.team = None
-        self.ennemy_team = None
-        self.won = False
-
-        # Check the team and the result here instead of checking it in every method
-        if self.player in self.game.team1.all():
-            self.team = self.game.team1.all()
-            self.ennemy_team = self.game.team2.all()
-            if self.game.winner == "team1":
-                self.won = True
-        elif self.player in self.game.team2.all():
-            self.team = self.game.team2.all()
-            self.ennemy_team = self.game.team1.all()
-            if self.game.winner == "team2":
-                self.won = True
-        else:
-            raise ValueError('Player is not in team1 nor in team2 of this game !', self.player)
-
-    def get_elo_after(self):
-        """Returns elo rating of the player after the game"""
-        return self.player.elo + self.get_elo_var()
-
-    def get_elo_var(self):
-        """Elo rating variation after this match"""
-        delta_elo = calculate_team_elo(self.team) - calculate_team_elo(self.ennemy_team)
-        return self.player._k() * (int(self.won) - prob_winning(delta_elo))

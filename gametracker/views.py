@@ -6,7 +6,7 @@ from django.views import generic
 from django.utils import timezone
 from django.urls import reverse
 
-from .models import Game, Player, TeamBalancer, PlayerGameStats
+from .models import Game, Player, TeamBalancer
 from .forms import GameForm, TeamsForm
 from utils import calculate_team_elo, prob_winning
 
@@ -78,9 +78,7 @@ def add_game(request):
 
             # Update players
             for player in list(game.team1.all()) + list(game.team2.all()):
-                player_game_stats = PlayerGameStats(player, game)
-                player.ngames += 1
-                player.elo = player_game_stats.get_elo_after()
+                player.play(game)
                 player.save()
 
             return redirect(reverse('gametracker:history'))
