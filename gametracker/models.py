@@ -51,6 +51,7 @@ class Game(models.Model):
     team2 = models.ManyToManyField('Player', related_name="team2")
     winner = models.CharField(max_length=20, default="team1", choices=[("team1", "Équipe 1"),
                                                                        ("team2", "Équipe 2")])
+
     def __str__(self):
         return str(self.date)
 

@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.test import TestCase
 from django.utils import timezone
 from django.urls import reverse
-from django.test import Client
 
 from models import TeamBalancer
 from utils import calculate_team_elo, prob_winning
