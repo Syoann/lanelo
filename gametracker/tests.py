@@ -15,6 +15,22 @@ class PlayerTest(TestCase):
         player = factories.PlayerFactory(name="Foo")
         self.assertEqual(str(player), "Foo")
 
+    def test_k_0(self):
+        player = factories.PlayerFactory()
+        self.assertEqual(player._k(), 25)
+
+    def test_k_10(self):
+        player = factories.PlayerFactory(ngames=10)
+        self.assertEqual(round(player._k(), 0), 20)
+
+    def test_k_100(self):
+        player = factories.PlayerFactory(ngames=100)
+        self.assertEqual(player._k(), 15)
+
+    def test_k_error(self):
+        player = factories.PlayerFactory(ngames=-1)
+        self.assertRaises(ValueError, player._k)
+
 
 class GameMapTest(TestCase):
     def test_str_gamemap(self):
@@ -33,8 +49,16 @@ class GameTest(TestCase):
         super(GameTest, cls).setUpClass()
 
     def test_str_game(self):
+        """Test Game __str__ method"""
         dt = timezone.now()
         self.assertEqual(str(factories.GameFactory.create(date=dt)), str(dt))
+
+    def test_delta_elo(self):
+        """Test Game delta_elo method"""
+        game = factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[2]])
+        self.assertEqual(game.delta_elo(), self.players[0].elo - self.players[2].elo)
+        self.assertEqual(game.delta_elo(self.players[0]), self.players[0].elo - self.players[2].elo)
+        self.assertEqual(game.delta_elo(self.players[2]), self.players[2].elo - self.players[0].elo)
 
     def test_team_elo(self):
         """Test du calcul de l'elo de l'équipe. Cas basiques"""
@@ -80,22 +104,6 @@ class GameTest(TestCase):
         # Probability is the same for everyone in the team
         self.assertEqual(round(prob_winning(calculate_team_elo(team1) - calculate_team_elo(team2)) * 100, 2), 1.24)
         self.assertEqual(round(prob_winning(calculate_team_elo(team2) - calculate_team_elo(team1)) * 100, 2), 98.76)
-
-    def test_k(self):
-        player = self.players[0]
-        self.assertEqual(player._k(), 25)
-
-        player.ngames = 10
-        self.assertEqual(round(player._k(), 0), 20)
-
-        player.ngames = 100
-        self.assertEqual(player._k(), 15)
-
-        player.ngames = 1000
-        self.assertEqual(round(player._k(), 0), 10)
-
-        player.ngames = -1
-        self.assertRaises(ValueError, player._k)
 
 
 class IntegrationTests(TestCase):

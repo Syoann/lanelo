@@ -30,8 +30,13 @@ class Player(models.Model):
 
     def play(self, game):
         """Play a game"""
+        # Did the player win the game ?
         won = int(self in game.winners())
+
+        # Calculate player's new elo
         self.elo += self._k() * (won - prob_winning(game.delta_elo(self)))
+
+        # Add this game to played games
         self.ngames += 1
 
 
