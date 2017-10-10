@@ -34,13 +34,13 @@ msgstr "Carte"
 #, fuzzy
 #| msgid "Equipes"
 msgid "Equipe 1"
-msgstr "&Eacute;quipes 1"
+msgstr "Équipes 1"
 
 #: gametracker/forms.py:11
 #, fuzzy
 #| msgid "Equipes"
 msgid "Equipe 2"
-msgstr "&Eacute;quipe 2"
+msgstr "Équipe 2"
 
 #: gametracker/forms.py:16
 msgid "Gagnant"
