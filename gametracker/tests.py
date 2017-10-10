@@ -60,6 +60,7 @@ class GameTest(TestCase):
         self.assertEqual(game.get_delta_elo(self.players[2]), 100)
 
     def test_winners(self):
+        """Tests that the Game class correctly returns the winning players"""
         game = factories.GameFactory.create(team1=[self.players[0], self.players[1]],
                                             team2=[self.players[2], self.players[3]])
 
@@ -150,9 +151,6 @@ class IntegrationTests(TestCase):
         player1.elo = 2100
         player2.elo = 2000
 
-        player1.ngames = 0
-        player2.ngames = 0
-
         # p1 gagne en équipe 1
         factories.GameFactory.create(team1=(player1,), team2=(player2,), winner="team1")
 
@@ -168,9 +166,6 @@ class IntegrationTests(TestCase):
 
         player1.elo = 2100
         player2.elo = 2000
-
-        player1.ngames = 0
-        player2.ngames = 0
 
         # p1 gagne en équipe 2
         factories.GameFactory.create(team1=(player2,), team2=(player1,), winner="team2")
