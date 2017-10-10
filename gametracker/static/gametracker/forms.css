@@ -27,13 +27,12 @@ select {
 
 
 /* Specific froms */
-
-#id_players {
+select#id_players, select#id_team1, select#id_team2 {
     height: 200px;
 }
 
 @media screen and (max-width: 700px) {
-    #id_players {
+    select#id_players, select#id_team1, select#id_team2 {
         height: 30px;
     }
 }
