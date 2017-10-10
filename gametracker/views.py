@@ -76,11 +76,6 @@ def add_game(request):
             game.save()
             form.save_m2m()
 
-            # Update players
-            for player in list(game.team1.all()) + list(game.team2.all()):
-                player.play(game)
-                player.save()
-
             return redirect(reverse('gametracker:history'))
     else:
         form = GameForm()

@@ -30,11 +30,15 @@ class Player(models.Model):
 
     def play(self, game):
         """Play a game"""
+        # Check that the player played this game
+        if not game.has_player(self):
+            raise(ValueError, 'Player did not participate to this game !')
+
         # Did the player win the game ?
         won = int(self in game.winners())
 
         # Calculate player's new elo
-        self.elo += self._k() * (won - prob_winning(game.delta_elo(self)))
+        self.elo += self._k() * (won - prob_winning(game.get_delta_elo(self)))
 
         # Add this game to played games
         self.ngames += 1
@@ -42,6 +46,7 @@ class Player(models.Model):
 
 @python_2_unicode_compatible
 class GameMap(models.Model):
+    """A game map object"""
     name = models.CharField(max_length=50)
 
     def __str__(self):
@@ -50,6 +55,10 @@ class GameMap(models.Model):
 
 @python_2_unicode_compatible
 class Game(models.Model):
+    """
+    A game opposing two teams. DO NOT modify teams after the game creation, otherwise the elo rating
+    of players will be incorrectly recalculated.
+    """
     date = models.DateTimeField()
     game_map = models.ForeignKey('GameMap', on_delete=models.PROTECT, null=True, blank=True)
     team1 = models.ManyToManyField('Player', related_name="team1")
@@ -60,7 +69,12 @@ class Game(models.Model):
     def __str__(self):
         return str(self.date)
 
+    def has_player(self, player):
+        """Checks if a player has played this game"""
+        return player in list(self.team1.all()) + list(self.team2.all())
+
     def winners(self):
+        """Returns winners of the game"""
         if self.winner == "team1":
             return self.team1.all()
         elif self.winner == "team2":
@@ -68,11 +82,16 @@ class Game(models.Model):
         else:
             raise(ValueError, 'Neither team1 nor team2 won the game!')
 
-    def delta_elo(self, player=None):
-        if player is None or player in self.team1.all():
-            return calculate_team_elo(self.team1.all()) - calculate_team_elo(self.team2.all())
-        elif player in self.team2.all():
-            return calculate_team_elo(self.team2.all()) - calculate_team_elo(self.team1.all())
+    def get_delta_elo(self, player=None):
+        """
+        Return the initial difference in elo (elo(team1) - elo(team2)).
+        If player is not None, the delta_elo is elo(team_player) - elo(other_team)
+        This attribute is added in a callback function after the two teams are populated
+        """
+        if player in self.team2.all():
+            return -self.delta_elo
+        else:
+            return self.delta_elo
 
 
 class TeamBalancer:
@@ -98,6 +117,7 @@ class TeamBalancer:
         return teams
 
     def get_teams(self):
+        """Return best teams according to the algorithm"""
         min_delta = None
         balanced_teams = None
         # For all combinations of players in 2 teams, compare elo
@@ -113,4 +133,5 @@ class TeamBalancer:
         return balanced_teams
 
     def get_balanced_teams(self):
+        """Return best teams with a similar number of players in both teams"""
         return self.__partition_players(len(self.players) // 2)
