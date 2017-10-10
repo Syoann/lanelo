@@ -141,10 +141,8 @@ def gettext(x):
     return x
 
 
-LANGUAGES = (
-   ('en', gettext('English')),
-   ('fr', gettext('French')),
-)
+LANGUAGES = (('en', gettext('English')),
+             ('fr', gettext('French')),)
 
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'gametracker/locale/'),
