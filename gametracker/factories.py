@@ -16,6 +16,7 @@ class PlayerFactory(factory.DjangoModelFactory):
     name = factory.LazyAttribute(lambda a: '{0}{1}'.format(a.firstname[:1], a.lastname).lower())
     ngames = 0
     elo = 1500
+    init_elo = factory.LazyAttribute(lambda p: p.elo)
 
 
 class GameMapFactory(factory.DjangoModelFactory):
