@@ -10,14 +10,14 @@ def post_delete_elo(sender, instance, *args, **kwargs):
     update_elo()
 
 
-@receiver(m2m_changed, sender=Game.team2.through)
-def post_save_elo(sender, instance, *args, **kwargs):
+@receiver(m2m_changed, sender=Game.team1.through)
+def post_save_elo1(sender, instance, *args, **kwargs):
     if instance.team1.all() and instance.team2.all():
         instance.delta_elo = calculate_team_elo(instance.team1.all()) - calculate_team_elo(instance.team2.all())
         update_elo()
 
 
-@receiver(m2m_changed, sender=Game.team1.through)
+@receiver(m2m_changed, sender=Game.team2.through)
 def post_save_elo2(sender, instance, *args, **kwargs):
     if instance.team1.all() and instance.team2.all():
         instance.delta_elo = calculate_team_elo(instance.team1.all()) - calculate_team_elo(instance.team2.all())

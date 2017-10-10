@@ -51,13 +51,24 @@ class GameTest(TestCase):
         dt = timezone.now()
         self.assertEqual(str(factories.GameFactory.create(date=dt)), str(dt))
 
-    def test_delta_elo(self):
+    def test_get_delta_elo(self):
         """Test Game get_delta_elo method"""
         game = factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[2]])
 
         self.assertEqual(game.get_delta_elo(), -100)
         self.assertEqual(game.get_delta_elo(self.players[0]), -100)
         self.assertEqual(game.get_delta_elo(self.players[2]), 100)
+
+    def test_winners(self):
+        game = factories.GameFactory.create(team1=[self.players[0], self.players[1]],
+                                            team2=[self.players[2], self.players[3]])
+
+        self.assertEqual(set(game.winners()), set([self.players[0], self.players[1]]))
+
+        game = factories.GameFactory.create(team1=[self.players[0], self.players[1]],
+                                            team2=[self.players[2], self.players[3]], winner="team2")
+
+        self.assertEqual(set(game.winners()), set([self.players[2], self.players[3]]))
 
     def test_team_elo(self):
         """Test du calcul de l'elo de l'équipe. Cas basiques"""

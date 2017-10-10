@@ -32,7 +32,7 @@ class Player(models.Model):
         """Play a game"""
         # Check that the player played this game
         if not game.has_player(self):
-            raise(ValueError, 'Player did not participate to this game !')
+            raise(ValueError, 'Player did not play this game !')
 
         # Did the player win the game ?
         won = int(self in game.winners())
@@ -75,12 +75,10 @@ class Game(models.Model):
 
     def winners(self):
         """Returns winners of the game"""
-        if self.winner == "team1":
-            return self.team1.all()
-        elif self.winner == "team2":
+        if self.winner == "team2":
             return self.team2.all()
         else:
-            raise(ValueError, 'Neither team1 nor team2 won the game!')
+            return self.team1.all()
 
     def get_delta_elo(self, player=None):
         """
