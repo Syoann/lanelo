@@ -115,7 +115,7 @@ class TeamBalancer:
         return teams
 
     def get_teams(self):
-        """Return best teams according to the algorithm"""
+        """Return the most balanced teams according to the algorithm"""
         min_delta = None
         balanced_teams = None
         # For all combinations of players in 2 teams, compare elo
@@ -131,5 +131,5 @@ class TeamBalancer:
         return balanced_teams
 
     def get_balanced_teams(self):
-        """Return best teams with a similar number of players in both teams"""
+        """Return the most balanced teams with a similar number of players in both teams"""
         return self.__partition_players(len(self.players) // 2)

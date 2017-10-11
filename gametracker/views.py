@@ -50,6 +50,8 @@ def balance_teams(request):
                 context.update({'team1eq': teams_eq[0], 'team2eq': teams_eq[1],
                                 'elo_team1eq': calculate_team_elo(teams_eq[0]),
                                 'elo_team2eq': calculate_team_elo(teams_eq[1])})
+            else:
+                context.update({'team1eq': None, 'team2eq': None})
 
             # Add winning probability for teams
             delta_elo = calculate_team_elo(teams[0]) - calculate_team_elo(teams[1])
@@ -62,7 +64,7 @@ def balance_teams(request):
             return render(request, "gametracker/balance_teams.html", {'form': form})
     else:
         form = TeamsForm()
-        return render(request, "gametracker/balance_teams.html", {'form': form})
+        return render(request, "gametracker/balance_teams.html", {'form': form, 'team1': None, 'team2': None})
 
 
 def add_game(request):

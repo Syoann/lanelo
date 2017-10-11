@@ -43,7 +43,7 @@ class GameMapTest(TestCase):
 
 class GameTest(TestCase):
     def setUp(self):
-        elos = [2000, 1500, 2100, 1900, 2500, 1500, 1400, 1200]
+        elos = [2000, 1500, 2100, 1900]
         self.players = [factories.PlayerFactory(elo=elo) for elo in elos]
 
     def test_str_game(self):
@@ -59,6 +59,20 @@ class GameTest(TestCase):
         self.assertEqual(game.get_delta_elo(self.players[0]), -100)
         self.assertEqual(game.get_delta_elo(self.players[2]), 100)
 
+    def test_get_delta_elo_0(self):
+        """Test Game get_delta_elo method with the same elo"""
+        self.players[1].elo = self.players[0].elo
+        self.players[1].save()
+        game = factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[1]])
+        self.assertEqual(game.get_delta_elo(), 0)
+
+    def test_get_delta_elo_neg(self):
+        """Test Game get_delta_elo method with the same elo"""
+        self.players[1].elo = 8000000000
+        self.players[1].save()
+        game = factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[1]])
+        self.assertEqual(game.get_delta_elo(), -8000000000 + 2000)
+
     def test_winners(self):
         """Tests that the Game class correctly returns the winning players"""
         game = factories.GameFactory.create(team1=[self.players[0], self.players[1]],
@@ -70,6 +84,12 @@ class GameTest(TestCase):
                                             team2=[self.players[2], self.players[3]], winner="team2")
 
         self.assertEqual(set(game.winners()), set([self.players[2], self.players[3]]))
+
+
+class UtilsTest(TestCase):
+    def setUp(self):
+        elos = [2000, 1500, 2100, 1900, 2500, 1500, 1400, 1200]
+        self.players = [factories.PlayerFactory(elo=elo) for elo in elos]
 
     def test_team_elo(self):
         """Test du calcul de l'elo de l'équipe. Cas basiques"""
@@ -100,7 +120,7 @@ class GameTest(TestCase):
         self.assertEqual(round(elo_team2, 0), 2325)
 
     def test_prob_winning(self):
-        """Test probabilité de gagner (positif)"""
+        """Test probabilité de gagner (>50%)"""
         team1 = [self.players[0], self.players[1], self.players[4], self.players[7]]
         team2 = [self.players[2], self.players[3], self.players[5], self.players[6]]
 
@@ -108,7 +128,7 @@ class GameTest(TestCase):
         self.assertEqual(round(prob_winning(calculate_team_elo(team2) - calculate_team_elo(team1)) * 100, 2), 33.39)
 
     def test_prob_winnng_under50(self):
-        """Test probabilité de gagner (négatif)"""
+        """Test probabilité de gagner (<50%)"""
         team1 = [self.players[0], self.players[1], self.players[6], self.players[7]]
         team2 = [self.players[2], self.players[3], self.players[4], self.players[5]]
 
@@ -139,64 +159,47 @@ class IntegrationTests(TestCase):
         self.players[0].refresh_from_db()
         self.players[2].refresh_from_db()
 
-        self.assertEqual(round(self.players[0].elo, 0), 1993)
-        self.assertEqual(round(self.players[2].elo, 0), 2107)
+        self.assertEqual(self.players[0].elo, 1993)
+        self.assertEqual(self.players[2].elo, 2107)
 
     # Integration tests
     def test_multiple_games(self):
         """Test que gagner en étant équipe 1 ou 2 n'a pas d'importance"""
-        player1 = self.players[0]
-        player2 = self.players[1]
-
-        player1.elo = 2100
-        player2.elo = 2000
+        player1 = factories.PlayerFactory(elo=2000)
+        player2 = factories.PlayerFactory(elo=2100)
 
         # p1 gagne en équipe 1
-        factories.GameFactory.create(team1=(player1,), team2=(player2,), winner="team1")
+        factories.GameFactory.create(team1=[player1], team2=[player2], winner="team1")
 
         # p2 gagne en équipe 2
-        factories.GameFactory.create(team1=(player1,), team2=(player2,), winner="team2")
+        factories.GameFactory.create(team1=[player1], team2=[player2], winner="team2")
+
+        player1.refresh_from_db()
+        player2.refresh_from_db()
 
         elo_p1_1 = player1.elo
         elo_p2_1 = player2.elo
 
         # Reinit
-        player1 = self.players[0]
-        player2 = self.players[1]
-
-        player1.elo = 2100
-        player2.elo = 2000
+        player1 = factories.PlayerFactory(elo=2000)
+        player2 = factories.PlayerFactory(elo=2100)
 
         # p1 gagne en équipe 2
-        factories.GameFactory.create(team1=(player2,), team2=(player1,), winner="team2")
+        factories.GameFactory.create(team1=[player2], team2=[player1], winner="team2")
 
         # p2 gagne en équipe 1
-        factories.GameFactory.create(team1=(player2,), team2=(player1,), winner="team1")
+        factories.GameFactory.create(team1=[player2], team2=[player1], winner="team1")
+
+        player1.refresh_from_db()
+        player2.refresh_from_db()
 
         elo_p1_2 = player1.elo
         elo_p2_2 = player2.elo
 
+        self.assertNotEqual(elo_p1_1, 2000)
+        self.assertNotEqual(elo_p2_1, 2100)
         self.assertEqual(elo_p1_1, elo_p1_2)
         self.assertEqual(elo_p2_1, elo_p2_2)
-
-    def test_balancing_teams(self):
-        elos = [2001, 1500, 2000, 1499]
-        players = [factories.PlayerFactory(elo=elo) for elo in elos]
-
-        team_balancer = TeamBalancer(players)
-        teams = team_balancer.get_teams()
-
-        self.assertEqual(set([players[0], players[3]]), set(teams[0]))
-        self.assertEqual(set([players[1], players[2]]), set(teams[1]))
-
-    def test_balancing_teams_alt(self):
-        elos = [2300, 1503, 1502, 1501, 1400]
-        players = [factories.PlayerFactory(elo=elo) for elo in elos]
-
-        team_balancer = TeamBalancer(players)
-        bteams = team_balancer.get_balanced_teams()
-
-        self.assertEqual(set(bteams[0]), set([players[0], players[-1]]))
 
     def test_delete_game(self):
         """Delete a game from the database and recalculate elo"""
@@ -226,6 +229,27 @@ class IntegrationTests(TestCase):
         self.assertEqual(self.players[1].elo, player2_copy.elo, 0)
 
 
+class TeamBalancerTest(TestCase):
+    def test_balancing_teams(self):
+        elos = [2001, 1500, 2000, 1499]
+        players = [factories.PlayerFactory(elo=elo) for elo in elos]
+
+        team_balancer = TeamBalancer(players)
+        teams = team_balancer.get_teams()
+
+        self.assertEqual(set([players[0], players[3]]), set(teams[0]))
+        self.assertEqual(set([players[1], players[2]]), set(teams[1]))
+
+    def test_balancing_teams_alt(self):
+        elos = [2300, 1503, 1502, 1501, 1400]
+        players = [factories.PlayerFactory(elo=elo) for elo in elos]
+
+        team_balancer = TeamBalancer(players)
+        bteams = team_balancer.get_balanced_teams()
+
+        self.assertEqual(set(bteams[0]), set([players[0], players[-1]]))
+
+
 # Test views
 class TestViews(TestCase):
     @classmethod
@@ -248,9 +272,6 @@ class TestViews(TestCase):
         player2 = self.players[1]
 
         response = self.client.post(reverse('gametracker:balance_teams'), {'players': [player1.pk, player2.pk]})
-        self.assertEqual(response.status_code, 200)
-
-        response = self.client.post(reverse('gametracker:balance_teams'), {'players': [player1.pk]})
         self.assertEqual(response.status_code, 200)
 
     def test_team_full_balancing_page(self):
