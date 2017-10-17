@@ -102,6 +102,7 @@ class TeamBalancer:
         min_delta = None
         teams = []
 
+        # Explore all combinations with 1st group of size 'size'
         for players in itertools.combinations(self.players, size):
             team1 = list(set(players))
             team2 = list(set(self.players) - set(players))
@@ -116,19 +117,9 @@ class TeamBalancer:
 
     def get_teams(self):
         """Return the most balanced teams according to the algorithm"""
-        min_delta = None
-        balanced_teams = None
-        # For all combinations of players in 2 teams, compare elo
-        # and save teams with minimum elo difference.
-        for size in range(1, len(self.players) / 2 + 1):
-            teams = self.__partition_players(size)
-            min_d = abs(calculate_team_elo(teams[0]) - calculate_team_elo(teams[1]))
-
-            if min_d < min_delta or min_delta is None:
-                min_delta = min_d
-                balanced_teams = teams
-
-        return balanced_teams
+        s_teams = [self.__partition_players(size) for size in range(1, len(self.players) / 2 + 1)]
+        deltas = [abs(calculate_team_elo(couple[0]) - calculate_team_elo(couple[1])) for couple in s_teams]
+        return s_teams[deltas.index(min(deltas))]
 
     def get_balanced_teams(self):
         """Return the most balanced teams with a similar number of players in both teams"""

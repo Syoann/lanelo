@@ -11,7 +11,6 @@ from .forms import GameForm, TeamsForm
 from utils import calculate_team_elo, prob_winning
 
 
-# Create your views here.
 def index(request):
     players = Player.objects.order_by('-elo')
     return render(request, "gametracker/index.html", {'player_list': players})
@@ -30,6 +29,23 @@ class HistoryView(generic.ListView):
 
     def get_queryset(self):
         return Game.objects.order_by('-date')
+
+
+def add_game(request):
+    """Add a new game in the database"""
+    if request.method == "POST":
+        form = GameForm(request.POST)
+
+        if form.is_valid():
+            game = form.save(commit=False)
+            game.date = timezone.now()
+            game.save()
+            form.save_m2m()
+
+            return redirect(reverse('gametracker:history'))
+    else:
+        form = GameForm()
+    return render(request, 'gametracker/add_game.html', {'form': form})
 
 
 def balance_teams(request):
@@ -65,20 +81,3 @@ def balance_teams(request):
     else:
         form = TeamsForm()
         return render(request, "gametracker/balance_teams.html", {'form': form, 'team1': None, 'team2': None})
-
-
-def add_game(request):
-    """Add a new game in the database"""
-    if request.method == "POST":
-        form = GameForm(request.POST)
-
-        if form.is_valid():
-            game = form.save(commit=False)
-            game.date = timezone.now()
-            game.save()
-            form.save_m2m()
-
-            return redirect(reverse('gametracker:history'))
-    else:
-        form = GameForm()
-    return render(request, 'gametracker/add_game.html', {'form': form})

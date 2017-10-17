@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'compressor',
     'debug_toolbar',
-    'gametracker',
+    'gametracker.apps.GametrackerConfig',
 ]
 
 MIDDLEWARE = [

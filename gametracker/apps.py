@@ -8,4 +8,4 @@ class GametrackerConfig(AppConfig):
     name = 'gametracker'
 
     def ready(self):
-        import gametracker.signals
+        import gametracker.admin

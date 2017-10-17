@@ -34,11 +34,12 @@ class PlayerTest(TestCase):
 
 class GameMapTest(TestCase):
     def test_str_gamemap(self):
-        names = ("Arabia", "")
+        gmap = factories.GameMapFactory.create(name="Arabia")
+        self.assertEqual(str(gmap), "Arabia")
 
-        for name in names:
-            gmap = factories.GameMapFactory.create(name=name)
-            self.assertEqual(str(gmap), name)
+    def test_str_gamemap_empty(self):
+        gmap = factories.GameMapFactory.create(name="")
+        self.assertEqual(str(gmap), "")
 
 
 class GameTest(TestCase):
