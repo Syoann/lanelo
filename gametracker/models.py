@@ -28,6 +28,10 @@ class Player(models.Model):
         else:
             raise ValueError("The number of games is a negative number !", self.ngames)
 
+    def has_won(self, game):
+        """Did player win this game ?"""
+        return self in game.winners()
+
     def play(self, game):
         """Play a game"""
         # Check that the player played this game
@@ -35,7 +39,7 @@ class Player(models.Model):
             raise(ValueError, 'Player did not play this game !')
 
         # Did the player win the game ?
-        won = int(self in game.winners())
+        won = int(self.has_won(game))
 
         # Calculate player's new elo
         self.elo += self._k() * (won - prob_winning(game.get_delta_elo(self)))

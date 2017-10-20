@@ -1,0 +1,12 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<h1>{{ player.name }}</h1>
+
+<p>{% trans "Joueur :" %} {{ player.name }}</p>
+<p>{% trans "Elo :" %} {{ player.elo }}</p>
+<p>{% trans "Nombre de victoires :" %} {{ victories }} ({{ ratio|floatformat:"2" }}%)</p>
+<p>{% trans "Nombre de défaites :" %} {{ defeats }}</p>
+
+{% endblock content %}

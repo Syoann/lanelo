@@ -26,13 +26,34 @@ select {
 }
 
 
-/* Specific froms */
+/* Specific forms */
 select#id_players, select#id_team1, select#id_team2 {
     height: 200px;
+    margin: auto;
+    text-align: center;
+}
+
+.form_teams {
+    display: grid;
+    margin: auto;
+    width: 250px;
+}
+
+select#id_team1 {
+    grid-column: 1;
+}
+
+select#id_team2 {
+    grid-column: 2;
 }
 
 @media screen and (max-width: 700px) {
     select#id_players, select#id_team1, select#id_team2 {
         height: 30px;
     }
+
+    .form_teams {
+        display: inline;
+    }
+
 }

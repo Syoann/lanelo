@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 from models import Game, GameMap, Player
-from signals import *
+import signals
 
 admin.site.site_header = (u'Administration de Lan Elo Tracker')
 admin.site.index_title = (u'Lan Elo Tracker')
@@ -12,7 +12,6 @@ admin.site.index_title = (u'Lan Elo Tracker')
 admin.site.register(Game)
 admin.site.register(GameMap)
 admin.site.register(Player)
-
 
 
 from django.db.models.signals import post_delete, m2m_changed

@@ -261,7 +261,7 @@ class TestViews(TestCase):
 
     def test_pages(self):
         """Test that all pages are accessible"""
-        pages = ('', '/index', '/games', '/addgame', '/players', '/teams')
+        pages = ('', '/index', '/games', '/addgame', '/players', '/teams')  # , '/player/SFry', '/player/gael')
 
         for page in pages:
             response = self.client.get(page)

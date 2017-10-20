@@ -8,7 +8,22 @@
 <form method="POST">
     {% csrf_token %}
 
-    {{ form.as_p }}
+    <p>
+        {{ form.game_map.label_tag }}
+        {{ form.game_map }}
+    </p>
+
+    <div class="form_teams">
+        {{ form.team1.label_tag }}
+        {{ form.team2.label_tag }}
+        {{ form.team1 }}
+        {{ form.team2 }}
+    </div>
+ 
+    <p>
+        {{ form.winner.label_tag }}
+        {{ form.winner }}
+    </p>
 
     <button type="submit">{% trans "Enregistrer" %}</button>
 </form>

@@ -10,14 +10,14 @@ class GameForm(forms.ModelForm):
     game_map = forms.ModelChoiceField(queryset=GameMap.objects.order_by('name'),
                                       required=False, label=_("Carte"))
     team1 = forms.ModelMultipleChoiceField(queryset=Player.objects.order_by('-elo'),
-                                           label=_(u"Equipe 1"))
+                                           label=_(u"Équipe 1"))
     team2 = forms.ModelMultipleChoiceField(queryset=Player.objects.order_by('-elo'),
-                                           label=_(u"Equipe 2"))
+                                           label=_(u"Équipe 2"))
 
     class Meta:
         model = Game
         exclude = ["date"]
-        labels = {"winner": _("Gagnant")}
+        labels = {"winner": _(u"Équipe gagnante")}
 
 
 class TeamsForm(forms.Form):

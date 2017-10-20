@@ -7,6 +7,7 @@ urlpatterns = [
     url(r'^index$', views.index, name='index'),
     url(r'^addgame$', views.add_game, name="add_game"),
     url(r'^players$', views.PlayersView.as_view(), name='players'),
+    url(r'^player/(?P<player_name>\w+)$', views.player_detail, name='player'),
     url(r'^games$', views.HistoryView.as_view(), name='history'),
     url(r'^teams$', views.balance_teams, name='balance_teams'),
 ]

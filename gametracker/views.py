@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views import generic
 from django.utils import timezone
 from django.urls import reverse
@@ -29,6 +29,25 @@ class HistoryView(generic.ListView):
 
     def get_queryset(self):
         return Game.objects.order_by('-date')
+
+
+def player_detail(request, player_name):
+    player = get_object_or_404(Player, name__iexact=player_name)
+
+    (n_victories, n_defeats) = (0, 0)
+    for game in Game.objects.all():
+        if game.has_player(player):
+            if player.has_won(game):
+                n_victories += 1
+            else:
+                n_defeats += 1
+
+    victory_ratio = n_victories * 100.0 / (n_victories + n_defeats)
+
+    print(victory_ratio)
+
+    return render(request, 'gametracker/player_detail.html', {'player': player, 'victories': n_victories,
+                                                              'defeats': n_defeats, 'ratio': victory_ratio})
 
 
 def add_game(request):
