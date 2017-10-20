@@ -19,9 +19,9 @@ a:visited {
 
 .introduction
 {
-    text-align: justify;
     width: 400px;
     margin: auto;
+    text-align: justify;
 }
 
 .elo_tracker {
@@ -33,7 +33,7 @@ a:visited {
 }
 
 @media screen and (max-width: 700px) {
-    .introduction {
+    body {
         width: 100%;
     }
 }

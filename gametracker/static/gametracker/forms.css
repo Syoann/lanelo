@@ -53,7 +53,31 @@ select#id_team2 {
     }
 
     .form_teams {
-        display: inline;
+        width: 120px;
+        margin: auto;
     }
 
+    .form_teams label[for=id_team1] {
+        grid-row-start: 1;
+        grid-col-start: 1;
+    }
+
+    select#id_team1 {
+        grid-row-start: 2;
+        grid-col-start: 1;
+        width: 100%;
+    }
+
+    .form_teams label[for=id_team2] {
+        margin-top: 15px;
+        grid-row-start: 3;
+        grid-col-start: 1;
+    }
+
+    select#id_team2 {
+        grid-row-start: 4;
+        grid-col-start: 1;
+        grid-column: 1;
+        width: 100%;
+    }
 }

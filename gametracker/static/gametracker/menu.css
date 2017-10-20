@@ -5,7 +5,7 @@
     list-style: none;
 }
 #menu {
-    width: 450px;
+    width: 400px;
     margin: auto;
     margin-bottom: 20px;
     color: white;
@@ -73,12 +73,15 @@
         width: 100%;
         overflow: scroll;
     }
+
     #menu li {
         width: 25%;
     }
+
     #menu li ul {
         width: 25%;
     }
+
     #menu li ul li {
         width: 100%;
     }
