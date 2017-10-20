@@ -42,9 +42,10 @@ def player_detail(request, player_name):
             else:
                 n_defeats += 1
 
-    victory_ratio = n_victories * 100.0 / (n_victories + n_defeats)
-
-    print(victory_ratio)
+    try:
+        victory_ratio = n_victories * 100.0 / (n_victories + n_defeats)
+    except ZeroDivisionError:
+        victory_ratio = 0
 
     return render(request, 'gametracker/player_detail.html', {'player': player, 'victories': n_victories,
                                                               'defeats': n_defeats, 'ratio': victory_ratio})

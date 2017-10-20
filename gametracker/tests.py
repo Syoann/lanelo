@@ -261,7 +261,8 @@ class TestViews(TestCase):
 
     def test_pages(self):
         """Test that all pages are accessible"""
-        pages = ('', '/index', '/games', '/addgame', '/players', '/teams')  # , '/player/SFry', '/player/gael')
+        pages = ('', '/index', '/games', '/addgame', '/players', '/teams',
+                 '/player/' + self.players[0].name, '/player/' + self.players[1].name.upper())
 
         for page in pages:
             response = self.client.get(page)
@@ -283,6 +284,19 @@ class TestViews(TestCase):
         response = self.client.post(reverse('gametracker:balance_teams'),
                                     {'players': players_pk})
         self.assertEqual(response.status_code, 200)
+
+    def test_player_detail(self):
+        """Test the detailed view of a player"""
+        factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[1]], winner="team1")
+
+        self.players[0].refresh_from_db()
+        self.players[1].refresh_from_db()
+
+        response = self.client.get("/player/" + self.players[0].name)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['victories'], 1)
+        self.assertEqual(response.context['defeats'], 0)
+        self.assertEqual(response.context['ratio'], 100)
 
     def test_add_game_page(self):
         """Test that the game insertion is working"""
