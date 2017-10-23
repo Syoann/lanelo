@@ -4,11 +4,10 @@
 {% block content %}
 <h1>{{ player.name }}</h1>
 
-<div>
+<div class="player">
     <p>{% trans "Joueur :" %} {{ player.name }}</p>
     <p>{% trans "Elo :" %} {{ player.elo }}</p>
     <p>{% trans "Nombre de victoires :" %} {{ victories }} ({{ ratio|floatformat:"2" }}%)</p>
     <p>{% trans "Nombre de défaites :" %} {{ defeats }}</p>
 </div>
-
 {% endblock content %}
