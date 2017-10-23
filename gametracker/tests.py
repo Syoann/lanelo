@@ -31,6 +31,15 @@ class PlayerTest(TestCase):
         player = factories.PlayerFactory(ngames=-1)
         self.assertRaises(ValueError, player._k)
 
+    def test_play(self):
+        player1 = factories.PlayerFactory()
+        player2 = factories.PlayerFactory()
+        player3 = factories.PlayerFactory()
+
+        game = factories.GameFactory.create(team1=[player1], team2=[player2])
+
+        self.assertRaises(ValueError, player3.play, game)
+
 
 class GameMapTest(TestCase):
     def test_str_gamemap(self):
@@ -85,6 +94,18 @@ class GameTest(TestCase):
                                             team2=[self.players[2], self.players[3]], winner="team2")
 
         self.assertEqual(set(game.winners()), set([self.players[2], self.players[3]]))
+
+    def test_losers(self):
+        """Tests that the Game class correctly returns the losing players"""
+        game = factories.GameFactory.create(team1=[self.players[0], self.players[1]],
+                                            team2=[self.players[2], self.players[3]])
+
+        self.assertEqual(set(game.losers()), set([self.players[2], self.players[3]]))
+
+        game = factories.GameFactory.create(team1=[self.players[0], self.players[1]],
+                                            team2=[self.players[2], self.players[3]], winner="team2")
+
+        self.assertEqual(set(game.losers()), set([self.players[0], self.players[1]]))
 
 
 class UtilsTest(TestCase):
@@ -276,6 +297,9 @@ class TestViews(TestCase):
         response = self.client.post(reverse('gametracker:balance_teams'), {'players': [player1.pk, player2.pk]})
         self.assertEqual(response.status_code, 200)
 
+        response = self.client.post(reverse('gametracker:balance_teams'), {'players': [player1.pk]})
+        self.assertEqual(response.status_code, 200)
+
     def test_team_full_balancing_page(self):
         """Test that team balancing return code after form completion is 200"""
         players = self.players[1:]
@@ -297,6 +321,19 @@ class TestViews(TestCase):
         self.assertEqual(response.context['victories'], 1)
         self.assertEqual(response.context['defeats'], 0)
         self.assertEqual(response.context['ratio'], 100)
+
+        response = self.client.get("/player/" + self.players[1].name)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context['victories'], 0)
+        self.assertEqual(response.context['defeats'], 1)
+        self.assertEqual(response.context['ratio'], 0)
+
+    def test_game_detail(self):
+        game = factories.GameFactory.create(team1=[self.players[0]], team2=[self.players[1]], winner="team1")
+        response = self.client.get("/game/" + str(game.pk))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context['winners']), [self.players[0]])
+        self.assertEqual(list(response.context['losers']), [self.players[1]])
 
     def test_add_game_page(self):
         """Test that the game insertion is working"""

@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 import os
 import sys
 
@@ -6,6 +5,7 @@ if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "lanelo.settings")
     try:
         from django.core.management import execute_from_command_line
+        from django.conf import settings
     except ImportError:
         # The above import may fail for some other reason. Ensure that the
         # issue is really that Django is missing to avoid masking other
@@ -19,4 +19,16 @@ if __name__ == "__main__":
                 "forget to activate a virtual environment?"
             )
         raise
+
+
+    if 'test' in sys.argv:
+        settings.DEBUG = False
+        settings.TEMPLATE_DEBUG = False
+
+        settings.MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware',
+                               'django.contrib.sessions.middleware.SessionMiddleware',
+                               'django.middleware.csrf.CsrfViewMiddleware',
+                               'django.contrib.auth.middleware.AuthenticationMiddleware',
+                               'django.contrib.messages.middleware.MessageMiddleware']
+
     execute_from_command_line(sys.argv)
