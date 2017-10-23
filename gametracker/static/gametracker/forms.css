@@ -5,11 +5,28 @@ form {
     text-align: center;
 }
 
+fieldset {
+    border-color: #34495e;
+    width: 300px;
+    margin: auto;
+    margin-bottom: 15px;
+    margin-top: 15px;
+}
+
+fieldset legend {
+    background-color: #34495e;
+    color: white;
+    padding: 7px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
 form button {
     color: white;
     background-color: #34495e;
     padding: 7px;
     border: none;
+    margin-bottom: 15px;
 }
 
 label {
@@ -19,7 +36,6 @@ label {
 }
 
 select {
-    background-color: none;
     border: solid 1px #34495e;
     width: 120px;
     overflow-y: auto;
@@ -52,6 +68,15 @@ select#id_team2 {
         height: 30px;
     }
 
+    fieldset {
+        width: 90%;
+        margin: auto;
+        padding-left: 0;
+        padding-right: 0;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
     .form_teams {
         width: 120px;
         margin: auto;
@@ -65,7 +90,7 @@ select#id_team2 {
     select#id_team1 {
         grid-row-start: 2;
         grid-col-start: 1;
-        width: 100%;
+        /*width: 100%;*/
     }
 
     .form_teams label[for=id_team2] {

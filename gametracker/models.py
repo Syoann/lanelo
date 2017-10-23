@@ -69,6 +69,7 @@ class Game(models.Model):
     team2 = models.ManyToManyField('Player', related_name="team2")
     winner = models.CharField(max_length=20, default="team1", choices=[("team1", "Équipe 1"),
                                                                        ("team2", "Équipe 2")])
+    game_file = models.FileField(upload_to='games/', null=True, blank=True)
 
     def __str__(self):
         return str(self.date)
@@ -83,6 +84,13 @@ class Game(models.Model):
             return self.team2.all()
         else:
             return self.team1.all()
+
+    def losers(self):
+        """Returns all losing players of the game"""
+        if self.winner == "team2":
+            return self.team1.all()
+        else:
+            return self.team2.all()
 
     def get_delta_elo(self, player=None):
         """

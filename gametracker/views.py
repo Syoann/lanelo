@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.urls import reverse
 
 from .models import Game, Player, TeamBalancer
-from .forms import GameForm, TeamsForm
+from .forms import GameForm, ReplayForm, TeamsForm
 from utils import calculate_team_elo, prob_winning
 
 
@@ -51,21 +51,33 @@ def player_detail(request, player_name):
                                                               'defeats': n_defeats, 'ratio': victory_ratio})
 
 
+def game_detail(request, pk):
+    """Detailed view of a game"""
+    game = get_object_or_404(Game, pk=pk)
+    return render(request, 'gametracker/game_detail.html', {'game': game, 'winners': game.winners(),
+                                                            'losers': game.losers()})
+
+
 def add_game(request):
     """Add a new game in the database"""
     if request.method == "POST":
-        form = GameForm(request.POST)
+        game_form = GameForm(request.POST)
+        replay_form = ReplayForm(request.POST, request.FILES)
 
-        if form.is_valid():
-            game = form.save(commit=False)
+        if game_form.is_valid():
+            game = game_form.save(commit=False)
             game.date = timezone.now()
             game.save()
-            form.save_m2m()
+            game_form.save_m2m()
 
             return redirect(reverse('gametracker:history'))
+
+        if replay_form.is_valid():
+            return redirect(reverse('gametracker:history'))
     else:
-        form = GameForm()
-    return render(request, 'gametracker/add_game.html', {'form': form})
+        game_form = GameForm()
+        replay_form = ReplayForm()
+    return render(request, 'gametracker/add_game.html', {'form': game_form, 'replay_form': replay_form})
 
 
 def balance_teams(request):

@@ -20,6 +20,14 @@ class GameForm(forms.ModelForm):
         labels = {"winner": _(u"Équipe gagnante")}
 
 
+class ReplayForm(forms.ModelForm):
+    replay_file = forms.FileField(required=False)
+
+    class Meta:
+        model = Game
+        exclude = ["date", "team1", "team2", "winner"]
+
+
 class TeamsForm(forms.Form):
     players = forms.ModelMultipleChoiceField(queryset=Player.objects.order_by('-elo'),
                                              label=_(u"Joueurs présents"))

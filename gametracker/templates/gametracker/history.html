@@ -13,10 +13,9 @@
 
     {% for game in game_list %}
         <tr>
-            <a href="/game/{{game.pk}}">
-            <td>{{ game.date|date:"d M. Y" }}</td>
-            <td>{{ game.game_map }}</td>
-            <td>
+            <td><a href="{% url 'gametracker:game' game.pk %}">{{ game.date|date:"d M. Y" }}</a></td>
+            <td><a href="{% url 'gametracker:game' game.pk %}">{{ game.game_map }}</a></td>
+            <td><a href="{% url 'gametracker:game' game.pk %}">
                 <table class="team_composition">
                     <!-- Winner team -->
                     <tr>
@@ -46,8 +45,8 @@
                         {% endif %}
                     </tr>
                 </table>
+                </a>
             </td>
-            </a>
         </tr>
     {% endfor %}
 </table>

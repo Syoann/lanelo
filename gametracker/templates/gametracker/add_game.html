@@ -5,27 +5,52 @@
 
 <h2>{% trans "Ajout d'une partie" %}</h2>
 
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div>
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <form method="POST">
     {% csrf_token %}
+    <fieldset>
+        <legend>Ajouter une partie manuellement</legend>
+        <p>
+            {{ form.game_map.label_tag }}
+            {{ form.game_map }}
+        </p>
 
-    <p>
-        {{ form.game_map.label_tag }}
-        {{ form.game_map }}
-    </p>
+        <div class="form_teams">
+            {{ form.team1.label_tag }}
+            {{ form.team2.label_tag }}
+            {{ form.team1 }}
+            {{ form.team2 }}
+        </div>
+     
+        <p>
+            {{ form.winner.label_tag }}
+            {{ form.winner }}
+        </p>
+    </fieldset>
+    <button type="submit" name="save">{% trans "Enregistrer" %}</button>
+</form>
 
-    <div class="form_teams">
-        {{ form.team1.label_tag }}
-        {{ form.team2.label_tag }}
-        {{ form.team1 }}
-        {{ form.team2 }}
-    </div>
- 
-    <p>
-        {{ form.winner.label_tag }}
-        {{ form.winner }}
-    </p>
-
-    <button type="submit">{% trans "Enregistrer" %}</button>
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <fieldset>
+        <legend>{% trans "Ajouter un replay" %}</legend>
+        {% trans "Replay de la partie :" %} {{ form.game_file }}
+    </fieldset>
+    <button type="submit" name="upload">{% trans "Ajouter" %}</button>
 </form>
 
 {% endblock content %}

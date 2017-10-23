@@ -33,6 +33,7 @@ class GameFactory(factory.DjangoModelFactory):
     date = factory.LazyFunction(timezone.now)
     game_map = models.GameMap("")
     winner = "team1"
+    game_file = None
 
     @factory.post_generation
     def team1(self, create, extracted, **kwargs):
