@@ -12,13 +12,15 @@
     </tr>
 
     {% for game in game_list %}
-        <tr><td>{{ game.date|date:"d M. Y" }}</td>
+        <tr>
+            <a href="/game/{{game.pk}}">
+            <td>{{ game.date|date:"d M. Y" }}</td>
             <td>{{ game.game_map }}</td>
             <td>
                 <table class="team_composition">
+                    <!-- Winner team -->
                     <tr>
                         <td class='won'>W</td>
-                        <!-- Winner team first -->
                         {% if game.winner == "team1" %}
                             {% for player in game.team1.all %}
                                 <td>{{ player.name }}</td>
@@ -45,6 +47,7 @@
                     </tr>
                 </table>
             </td>
+            </a>
         </tr>
     {% endfor %}
 </table>
