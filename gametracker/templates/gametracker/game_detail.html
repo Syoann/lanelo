@@ -1,0 +1,13 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans "Partie du " %}{{ game.date }}</h1>
+
+<div class="game">
+    <p>{% trans "Date:" %} {{ game.date }}</p>
+    <p>{% trans "Carte :" %} {{ game.game_map.name }}</p>
+    <p>{% trans "Equipe victorieuse : " %}{{ winners|join:", " }}</p>
+    <p>{% trans "Equipe perdante : " %} {{ losers|join:", " }}</p>
+</div>
+{% endblock content %}
