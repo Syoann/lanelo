@@ -17,6 +17,7 @@ class Player(models.Model):
     ngames = models.PositiveIntegerField(default=0)
     elo = models.PositiveIntegerField(default=1400)
     init_elo = models.PositiveIntegerField(default=1400)
+    avatar = models.ImageField(upload_to='avatars/', default='', blank=True)
 
     def __str__(self):
         return self.name

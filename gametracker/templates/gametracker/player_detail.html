@@ -1,10 +1,16 @@
 {% extends 'gametracker/base.html' %}
 {% load i18n %}
+{% load static %}
 
 {% block content %}
 <h1>{{ player.name }}</h1>
 
 <div class="player">
+
+    {% if player.avatar != 'avatar' %}
+    <div class="avatar_container"><img src="{% static 'avatars/'|add:player.name|add:'.png' %}" alt="Avatar {{ player.name }}" /></div>
+    {% endif %}
+
     <p>{% trans "Joueur :" %} {{ player.name }}</p>
     <p>{% trans "Elo :" %} {{ player.elo }}</p>
     <p>{% trans "Nombre de victoires :" %} {{ victories }} ({{ ratio|floatformat:"2" }}%)</p>

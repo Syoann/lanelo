@@ -187,6 +187,9 @@ STATICFILES_FINDERS = (
 
 STATIC_ROOT = '/home/yoann/Sites/lanelo/static'
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    '/var/www/html/media/',
+]
 
 COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
@@ -194,4 +197,4 @@ COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter']
 
 # Media root
-MEDIA_ROOT = '/var/www/html/lanelo/media/'
+MEDIA_ROOT = '/var/www/html/media/'

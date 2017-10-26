@@ -38,8 +38,22 @@ a:visited {
     text-align: center;
 }
 
+.avatar_container {
+    margin: auto;
+    text-align: center;
+}
+
+.avatar_container img {
+    width: 150px;
+    text-align: center;
+}
+
 @media screen and (max-width: 700px) {
-    body {
+    .introduction, .player, .game {
         width: 100%;
+    }
+
+    .avatar_container img {
+        width: 100px;
     }
 }

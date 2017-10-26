@@ -346,3 +346,8 @@ class TestViews(TestCase):
                                     'team2': [player2.pk], 'winner': 'team1'})
 
         self.assertRedirects(response, reverse('gametracker:history'))
+
+    def test_add_empty_replay(self):
+        """Add an empty replay file"""
+        response = self.client.post(reverse('gametracker:add_game'), {})
+        self.assertRedirects(response, reverse('gametracker:history'))
