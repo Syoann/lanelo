@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 @receiver(pre_save, sender=Player)
 def generate_identicon(sender, instance, *args, **kwargs):
     name = instance.name
-    output = '/var/www/html/lanelo/static/avatars/' + name + '.png'
+    output = settings.MEDIA_ROOT + 'avatars/' + name + '.png'
     cmd = ' '.join(["/usr/local/n/versions/node/8.8.0/bin/node",
                     "/home/yoann/jdenticon/test.js",
                     name,
@@ -24,6 +24,7 @@ def generate_identicon(sender, instance, *args, **kwargs):
     p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
     out = p.communicate()
     logger.debug(out)
+    instance.avatar = '/avatars/' + name + '.png'
 
 
 @receiver(post_delete, sender=Game)
@@ -53,7 +54,7 @@ def update_elo():
 
     for game in Game.objects.all():
         # We can't list players from the game object because it contains player instances with
-        # their own history. We need to use the new instances stored in 'players'
+        # their own history. We have to use the new instances stored in 'players'
         team1 = []
         team2 = []
         for player in players:
