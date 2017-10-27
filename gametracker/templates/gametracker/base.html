@@ -1,6 +1,6 @@
 {% load static %}
-{% load compress %}
 {% load i18n %}
+{% load pipeline %}
 
 <!doctype html>
 
@@ -9,12 +9,7 @@
         <title>LAN Elo Tracker</title>
         <meta charset="utf-8">
         <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
-        {% compress css %}
-        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/menu.css' %}" />
-        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/style.css' %}" />
-        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/forms.css' %}" />
-        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/tables.css' %}" />
-        {% endcompress %}
+        {% stylesheet 'gametracker' %}
         <link rel="icon" type="image/png" href="{% static 'gametracker/favicon.ico' %}" />
         <meta name='description' content='Suivi des parties et classement des joueurs sur Age of Empires II'>
     </head>

@@ -15,10 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 with open('/etc/secret_key_lanelo.txt') as f:
     SECRET_KEY = f.read().strip()
@@ -28,9 +24,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [u'192.168.0.14', u'lanelo.servyo.fr', u'www.lanelo.servyo.fr']
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -38,13 +32,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'compressor',
+    'pipeline',
     'debug_toolbar',
     'gametracker.apps.GametrackerConfig',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'pipeline.middleware.MinifyHTMLMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -91,6 +87,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },
@@ -101,7 +98,6 @@ WSGI_APPLICATION = 'lanelo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -112,20 +108,11 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
@@ -175,26 +162,33 @@ LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'gametracker/locale/'),
 )
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-COMPRESS_ENABLED = True
-COMPRESS_OFFLINE = True
+# Static files
+STATICFILES_STORAGE = 'pipeline.storage.PipelineStorage'
+
+PIPELINE = {
+    'PIPELINE_ENABLED': True,
+    'CSS_COMPRESSOR': 'pipeline.compressors.cssmin.CSSMinCompressor',
+    'STYLESHEETS': {
+        'gametracker': {
+            'source_filenames': (
+                'gametracker/style.css',
+                'gametracker/forms.css',
+                'gametracker/menu.css',
+                'gametracker/tables.css',
+            ),
+            'output_filename': 'css/lanelo.css',
+        },
+    },
+}
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, "media"),
+MEDIA_URL = '/media/'
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
+    'pipeline.finders.PipelineFinder',
 )
-
-STATIC_ROOT = '/home/yoann/Sites/lanelo/static'
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    '/var/www/html/media/',
-]
-
-COMPRESS_URL = STATIC_URL
-COMPRESS_ROOT = STATIC_ROOT
-
-COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSCompressorFilter']
-
-# Media root
-MEDIA_ROOT = '/var/www/html/media/'

@@ -1,14 +1,13 @@
 {% extends 'gametracker/base.html' %}
 {% load i18n %}
-{% load static %}
 
 {% block content %}
 <h1>{{ player.name }}</h1>
 
 <div class="player">
 
-    {% if player.avatar != 'avatar' %}
-    <div class="avatar_container"><img src="{% static 'avatars/'|add:player.name|add:'.png' %}" alt="Avatar {{ player.name }}" /></div>
+    {% if player.avatar %}
+        <div class="avatar_container"><img src="{{ MEDIA_URL }}{{ 'avatars/'|add:player.name|add:'.png' }}" alt="Avatar {{ player.name }}" /></div>
     {% endif %}
 
     <p>{% trans "Joueur :" %} {{ player.name }}</p>
