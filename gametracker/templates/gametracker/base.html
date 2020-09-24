@@ -1,24 +1,20 @@
 {% load static %}
-{% load i18n %}
 {% load pipeline %}
 
-<!doctype html>
+<!DOCTYPE html>
 
 <html lang="fr">
     <head>
         <title>LAN Elo Tracker</title>
-        <meta charset="utf-8">
+        <meta charset="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
-        {% stylesheet 'gametracker' %}
-        <link rel="icon" type="image/png" href="{% static 'gametracker/favicon.ico' %}" />
-        <meta name='description' content='Suivi des parties et classement des joueurs sur Age of Empires II'>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous" />
+        <link rel="stylesheet" type="text/css" href="{% static 'gametracker/style.css' %}" />
+        <link rel="icon" type="image/png" href="{% static 'gametracker/favicon.png' %}" />
+        <meta name='description' content='Suivi des parties et classement des joueurs sur Age of Empires II' />
     </head>
 
-    <body>
-        <div class="page_header">
-            <h1>LAN Elo Tracker</h1>
-        </div>
-
+    <body class="has-navbar-fixed-top">
         {% include "gametracker/menu.html" %}
         
         <div>

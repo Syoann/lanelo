@@ -1,0 +1,25 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n crispy_forms_tags %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Créer une partie manuellement" %}</h1>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <p>Sélectionnez les joueurs de chaque équipe et indiquez l'équipe gagnante.<br />
+        Vous pouvez également renseigner la carte sur laquelle s'est déroulée la partie.</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        {% crispy form %}
+    </div>
+</section>
+
+{% endblock content %}

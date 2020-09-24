@@ -1,53 +1,87 @@
 {% extends 'gametracker/base.html' %}
-{% load i18n %}
+{% load i18n custom_tags %}
 
 {% block content %}
-<h2>{% trans 'Historique des parties' %}</h2>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-<table class="history">
-    <tr>
-        <th>{% trans 'Date' %}</th>
-        <th>{% trans 'Carte' %}</th>
-        <th>{% trans 'Equipes' %}</th>
-    </tr>
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans 'Historique des parties' %}</h1>
+    </div>
+</section>
 
-    {% for game in game_list %}
-        <tr>
-            <td><a href="{% url 'gametracker:game' game.pk %}">{{ game.date|date:"d M. Y" }}</a></td>
-            <td><a href="{% url 'gametracker:game' game.pk %}">{{ game.game_map }}</a></td>
-            <td><a href="{% url 'gametracker:game' game.pk %}">
-                <table class="team_composition">
-                    <!-- Winner team -->
-                    <tr>
-                        <td class='won'>W</td>
-                        {% if game.winner == "team1" %}
-                            {% for player in game.team1.all %}
-                                <td>{{ player.name }}</td>
-                            {% endfor %}
-                        {% else %}
-                            {% for player in game.team2.all %}
-                                <td>{{ player.name }}</td>
-                            {% endfor %}
-                        {% endif %}
-                    </tr>
-
-                    <!-- Loser team -->
-                    <tr>
-                        <td class="lost">L</td>
-                        {% if game.winner == "team2" %}
-                            {% for player in game.team1.all %}
-                                <td>{{ player.name }}</td>
-                            {% endfor %}
-                        {% else %}
-                            {% for player in game.team2.all %}
-                                <td>{{ player.name }}</td>
-                            {% endfor %}
-                        {% endif %}
-                    </tr>
-                </table>
-                </a>
-            </td>
+{% if game_list %}
+<section class="section">
+    <div class="container">
+    <table class="table is-hoverable history">
+        <thead>
+        <tr class="is-selected has-text-centered">
+            <th>{% trans 'Date' %}</th>
+            <th>{% trans 'Carte' %}</th>
+            <th>{% trans 'Équipes' %}</th>
         </tr>
-    {% endfor %}
-</table>
+        </thead>
+
+        {% for game in game_list %}
+            <tr>
+                <td><a href="{% url 'gametracker:game' game.pk %}"><p class="title is-6">{{ game.date|date:"d F Y" }}</p>
+                                                                   <p class="subtitle is-6">{{ game.date|date:"H:i" }}</p></a>
+                                                                   {% if game.ranked %}
+                                                                       Classée
+                                                                   {% endif %}</td>
+                <td><a href="{% url 'gametracker:game' game.pk %}">{{ game.game_map }}<br /><img src="{{ game.replay.minimap.url }}" alt="Minimap" class="minimap_thumbnail" /></a></td>
+                <td>
+                    <div class="team_composition">
+                        <nav class="level">
+                            <div class="level-left">
+                                <div class="level-item won">
+                                    <p><i class="fas fa-crown"></i></p>
+                                </div>
+
+                                {% for player in game.winners %}
+                                <div class="level-item">
+                                    <p class="tag is-medium has-text-weight-semibold">{{ player.identity.pseudo }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </nav>
+
+                        <nav class="level">
+                            <div class="level-left">
+                                <div class="level-item lost">
+                                    <p><i class="fas fa-fw"></i></p>
+                                </div>
+
+                                {% for player in game.losers %}
+                                <div class="level-item">
+                                    <p class="tag is-medium has-text-grey">{{ player.identity.pseudo }}</p>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </nav>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+</section>
+
+{% else %}
+<section class="section">
+    <div class="container">
+    <p>{% trans "Aucune partie dans la base de données..." %}</p>
+    </div>
+</section>
+{% endif %}
+
+<script>
+    $('tr').click(function(){
+        window.location = $(this).find('a').attr('href');
+    }).hover(function(){
+        $(this).toggleClass('hover');
+    });
+</script>
+
 {% endblock content %}
+

@@ -1,0 +1,22 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Erreur" %}</h1>
+        <p class="subtitle">{% trans "Partie dupliquée" %}</hp>
+    </div>
+</section>
+
+<section class="section">
+    <div class="notification is-warning">
+        <p>
+            Cette partie est déjà présente dans la base de données.<br />
+            La partie n'a pas été ajoutée.
+        </p>
+    </div>
+</section>
+
+{% endblock %}

@@ -14,6 +14,8 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_URL = "https://www.lanelo.servyo.fr"
+PREPEND_WWW = True
 
 # SECURITY WARNING: keep the secret key used in production secret!
 with open('/etc/secret_key_lanelo.txt') as f:
@@ -22,7 +24,10 @@ with open('/etc/secret_key_lanelo.txt') as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'192.168.0.14', u'lanelo.servyo.fr', u'www.lanelo.servyo.fr']
+# Security
+SECURE_SSL_REDIRECT = False
+
+ALLOWED_HOSTS = ['lanelo.servyo.fr', 'www.lanelo.servyo.fr']
 
 # Application definition
 INSTALLED_APPS = [
@@ -32,15 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'chart_tools',
     'pipeline',
-    'debug_toolbar',
+#    'debug_toolbar',
+    'crispy_forms',
     'gametracker.apps.GametrackerConfig',
+    'django_cleanup',
 ]
 
 MIDDLEWARE = [
     'django.middleware.gzip.GZipMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
-    'pipeline.middleware.MinifyHTMLMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -49,24 +56,26 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-    'htmlmin.middleware.HtmlMinifyMiddleware',
-    'htmlmin.middleware.MarkRequestMiddleware',
+    'gametracker.middleware.prettifyer.PrettifyHtml',
 ]
 
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.versions.VersionsPanel',
-    'debug_toolbar.panels.timer.TimerPanel',
-    'debug_toolbar.panels.settings.SettingsPanel',
-    'debug_toolbar.panels.headers.HeadersPanel',
-    'debug_toolbar.panels.request.RequestPanel',
-    'debug_toolbar.panels.sql.SQLPanel',
-    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
-    'debug_toolbar.panels.templates.TemplatesPanel',
-    'debug_toolbar.panels.cache.CachePanel',
-    'debug_toolbar.panels.signals.SignalsPanel',
-    'debug_toolbar.panels.logging.LoggingPanel',
-    'debug_toolbar.panels.redirects.RedirectsPanel',
-]
+#DEBUG_TOOLBAR_PANELS = [
+#    'debug_toolbar.panels.versions.VersionsPanel',
+#    'debug_toolbar.panels.timer.TimerPanel',
+#    'debug_toolbar.panels.settings.SettingsPanel',
+#    'debug_toolbar.panels.headers.HeadersPanel',
+#    'debug_toolbar.panels.request.RequestPanel',
+#    'debug_toolbar.panels.sql.SQLPanel',
+#    'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+#    'debug_toolbar.panels.templates.TemplatesPanel',
+#    'debug_toolbar.panels.cache.CachePanel',
+#    'debug_toolbar.panels.signals.SignalsPanel',
+#    'debug_toolbar.panels.logging.LoggingPanel',
+#    'debug_toolbar.panels.redirects.RedirectsPanel',
+#    'debug_toolbar.panels.version.VersionDebugPanel',
+#    'debug_toolbar.panels.timer.TimerDebugPanel',
+#    'debug_toolbar.panels.profiling.ProfilingDebugPanel',
+#]
 
 X_FRAME_OPTIONS = 'DENY'
 CSRF_COOKIE_SECURE = False
@@ -100,8 +109,11 @@ WSGI_APPLICATION = 'lanelo.wsgi.application'
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'aoegames',
+        'USER': 'servyo',
+        'PASSWORD': 'fr159biscochonsd',
+        'HOST': 'localhost',
     }
 }
 
@@ -124,7 +136,7 @@ LOGGING = {
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': '/home/yoann/log/gametracker.log',
+            'filename': '/var/log/gametracker.log',
         },
         'console': {
             'level': 'DEBUG',
@@ -148,7 +160,7 @@ LANGUAGE_CODE = 'fr-fr'
 TIME_ZONE = 'Europe/Paris'
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 
 
 def gettext(x):
@@ -172,9 +184,6 @@ PIPELINE = {
         'gametracker': {
             'source_filenames': (
                 'gametracker/style.css',
-                'gametracker/forms.css',
-                'gametracker/menu.css',
-                'gametracker/tables.css',
             ),
             'output_filename': 'css/lanelo.css',
         },
@@ -184,11 +193,22 @@ PIPELINE = {
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/var/www/html/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = '/media/'
+
+FILE_UPLOAD_PERMISSIONS = 0o644
+
+def custom_show_toolbar(request):
+    return True # Always show toolbar, for example purposes only.
+
+#DEBUG_TOOLBAR_CONFIG = {
+#    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+#}
 
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'pipeline.finders.PipelineFinder',
 )
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

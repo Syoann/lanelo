@@ -1,0 +1,8 @@
+{% load crispy_forms_field %}
+
+<div class="form-group">
+  <div class="custom-checkbox">
+    {% crispy_field field 'class' 'switch is-rounded is-info' %}
+    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+  </div>
+</div>

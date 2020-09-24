@@ -1,0 +1,78 @@
+@charset "utf-8";
+
+$header_color: white;
+$link-color: #363636;
+
+// Table
+$table-row-active-background-color: #00cd86;
+$header_background: $table-row-active-background-color;
+
+
+@import '../bulma-0.7.1/bulma.sass';
+@import '../bulma-0.7.1/sass/bulma-switch/bulma-switch.sass';
+
+a {
+    color: $link-color;
+}
+
+canvas {
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.asteriskField {
+    display: none;
+}
+
+.chronology_container {
+    margin: auto;
+    overflow-x: scroll;
+    overflow-y: hidden;
+
+    .chronology {
+        height: 100%;
+        max-width: none;
+    }
+}
+
+.minimap_thumbnail {
+    min-width: 100px;
+    max-width: 200px;
+}
+
+.form_balance_teams {
+    width: 200px;
+    text-align: left;
+}
+
+.form_balance_teams .form-check {
+    padding-bottom: 10px;
+}
+
+#div_id_players .form-label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    color: $header-color;
+    background-color: $header-background;
+    font-weight: bold;
+    padding: 5px;
+}
+
+.tag .patchy {
+    padding-left: 1px;
+    padding-right: 1px;
+}
+
+.button-centered {
+    display: block;
+    margin: auto;
+    margin-top: 10px;
+}
+
+
+@media screen and (max-width: 500px){
+    .minimap_thumbnail {
+        max-width: 100px;
+    }
+}

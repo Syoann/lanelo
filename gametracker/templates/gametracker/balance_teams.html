@@ -1,36 +1,53 @@
 {% extends 'gametracker/base.html' %}
-{% load i18n %}
-{% load custom_tags %}
+{% load i18n custom_tags crispy_forms_tags %}
 
 {% block content %}
-<h2>{% trans "Composition des equipes" %}</h2>
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Composition des équipes" %}</h1>
+    </div>
+</section>
 
-<form method="POST">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">{% trans "Valider" %}&nbsp;<span class='arrow'>&#x2713;</span></button>
-</form>
+<section class="section">
+    <div class="container">
+        <p>
+            Composez des équipes équilibrées à partir de la liste des joueurs présents.<br />
+            Sélectionnez les joueurs qui vont disputer la partie et cliquez sur 'Valider' pour 
+            voir les équipes proposées.
+        </p>
+    </div>
+</section>
 
 {% if team1 and team2 %}
-<div class="proposed_teams">
-    <h3>{% trans "&Eacute;quipes propos&eacute;es :" %}</h3>
+<section class="section">
+    <div class="container">
+        <div class="notification has-text-centered {{ color_cls }}">
+            <h5 class="title is-5">{% trans "Équipes proposées" %}</h5>
 
-    <p>{{ team1|join_by_attr:"name" }} ({{ elo_team1|floatformat:"0" }}) [{{pw_team1|floatformat:"0"}}%] <br />
-       vs.<br />
-       {{ team2|join_by_attr:"name" }} ({{ elo_team2|floatformat:"0" }}) [{{pw_team2|floatformat:"0"}}%]
-    </p>
+            <p>{{ team1|join_by_attr:"name" }} ({{pw_team1|floatformat:"0"}}%) <br />
+               vs.<br />
+               {{ team2|join_by_attr:"name" }} ({{pw_team2|floatformat:"0"}}%)
+            </p>
 
-    {% if not team1eq is None and not team2eq is None %}
+            {% if team1eq and team2eq %}
 
-    <p>{% trans "ou bien :" %}</b>
+            <p><br />{% trans "ou bien :" %}<br /><br /></p>
 
-    <p>{{ team1eq|join_by_attr:"name" }} ({{ elo_team1eq|floatformat:"0" }})<br />
-        vs.<br />
-       {{ team2eq|join_by_attr:"name" }} ({{ elo_team2eq|floatformat:"0" }})
-    </p>
-    {% endif %}
-</div>
+            <p>{{ team1eq|join_by_attr:"name" }} ({{pw_team1eq|floatformat:"0"}}%)<br />
+                vs.<br />
+               {{ team2eq|join_by_attr:"name" }} ({{pw_team2eq|floatformat:"0"}}%)
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
 {% endif %}
+
+<section class="section">
+    <div class="container has-text-centered">
+        <div class="form_balance_teams">
+            {% crispy form %}
+        </div>
+    </div>
+</section>
 {% endblock content %}

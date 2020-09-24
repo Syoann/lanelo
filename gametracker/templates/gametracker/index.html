@@ -2,13 +2,35 @@
 {% load i18n %}
 
 {% block content %}
-    <p class="introduction">
-        <span class="elo_tracker">Elo tracker</span> permet d'enregistrer les parties d'Age of Empires II lors des LAN et de suivre
-        la progression des joueurs.<br />
-        Le système permet également de composer facilement des équipes 
-        équilibrées en fonction des joueurs présents.
-    </p>
+<section class="hero is-info">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        LAN Elo Tracker
+      </h1>
+      <h2 class="subtitle">
+        {% trans "Suivi des parties de AoE II en LAN" %}
+      </h2>
+    </div>
+  </div>
+</section>
 
-    <h2>{% trans 'Classement actuel' %}</h2>
+<section class="section">
+<div class="container has-text-justified">
+    <p>
+        <span class="has-text-weight-bold">Elo tracker</span> permet d'enregistrer les parties
+        de <span class="has-text-weight-bold">Age of Empires&nbsp;II</span>
+        lors des LAN et de suivre la progression des joueurs.<br />
+        Le système permet également de composer facilement des équipes équilibrées en fonction 
+        des joueurs présents.
+    </p>
+</div>
+</section>
+
+<section class="section">
+    <div class="container">
+    <h2 class="title is-4">{% trans "Classement actuel" %}</h2>
     {% include "gametracker/ranking.html" %}
+    </div>
+</section>
 {% endblock content %}

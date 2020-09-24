@@ -1,0 +1,28 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans 'Classement des joueurs' %}</h1>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <p>{% blocktrans count counter=n_games %}
+           Classement des joueurs après 1 partie classée.
+           {% plural %}
+           Classement des joueurs après {{ n_games }} parties classées.
+           {% endblocktrans %}
+        </p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+    {% include 'gametracker/ranking.html' %}
+    </div>
+</section>
+
+{% endblock content %}

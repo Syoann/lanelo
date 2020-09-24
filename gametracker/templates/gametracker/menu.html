@@ -1,19 +1,49 @@
 {% load i18n %}
 
-<ul id="menu">
-    <li><a href="{% url 'gametracker:index' %}">Home</a></li>
-    <li>
-        <a href="#">{% trans "Joueurs" %}<span class='arrow'>&#x25be;</span></a>
-        <ul>
-            <li><a href="{% url 'gametracker:players' %}">{% trans "Classement" %}</a></li>
-        </ul>
-    </li>
-    <li>
-        <a href="#">{% trans "Parties" %}<span class='arrow'>&#x25be;</span></a>
-        <ul>
-            <li><a href="{% url 'gametracker:history' %}">{% trans "Historique" %}</a></li>
-            <li><a href="{% url 'gametracker:add_game' %}">{% trans "Ajout partie" %}</a></li>
-        </ul>
-    </li>
-    <li><a href="{% url 'gametracker:balance_teams' %}">{% trans "Composer" %}</a></li>
-</ul>
+<nav class="navbar is-transparent is-fixed-top is-info">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="{% url 'gametracker:index' %}">LAN Elo Tracker</a>
+        <span class="navbar-burger" data-target="menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+    </div>
+    <div class="navbar-menu" id="menu">
+        <div class="navbar-start">
+            <a class="navbar-item" href="{% url 'gametracker:index' %}">{% trans "Home" %}</a>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">{% trans "Joueurs" %}</a>
+                <div class="navbar-dropdown"> 
+                <a class="navbar-item" href="{% url 'gametracker:players' %}">{% trans "Classement" %}</a>
+                </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+                <a class="navbar-link">{% trans "Parties" %}</a>
+                <div class="navbar-dropdown"> 
+                    <a class="navbar-item" href="{% url 'gametracker:history' %}">{% trans "Historique" %}</a>
+                    <a class="navbar-item" href="{% url 'gametracker:add_game' %}">{% trans "Ajouter une partie" %}</a>
+                    <a class="navbar-item" href="{% url 'gametracker:manually_add_game' %}">{% trans "Créer une partie" %}</a>
+                </div>
+            </div>
+            <a class="navbar-item" href="{% url 'gametracker:balance_teams' %}">{% trans "Équilibrer équipes" %}</a>
+            <a class="navbar-item" href="{% url 'gametracker:build_orders' %}">{% trans "Tutoriels" %}</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => { // Get all "navbar-burger" elements
+        const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0); // Check if there are any navbar burgers
+        if ($navbarBurgers.length > 0) { // Add a click event on each of them
+            $navbarBurgers.forEach( el => {
+                el.addEventListener('click', () => { // Get the target from the "data-target" attribute
+                    const target = el.dataset.target;
+                    const $target = document.getElementById(target); // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+                    el.classList.toggle('is-active');
+                    $target.classList.toggle('is-active');
+                });
+            }); 
+        }
+    });
+</script>

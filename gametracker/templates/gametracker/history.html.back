@@ -1,0 +1,85 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n custom_tags %}
+
+{% block content %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans 'Historique des parties' %}</h1>
+    </div>
+</section>
+
+{% if game_list %}
+<section class="section">
+    <div class="container">
+    <table class="table is-hoverable history">
+        <thead>
+        <tr class="is-selected has-text-centered">
+            <th>{% trans 'Date' %}</th>
+            <th>{% trans 'Carte' %}</th>
+            <th>{% trans 'Équipes' %}</th>
+        </tr>
+        </thead>
+
+        {% for game in game_list %}
+            <tr>
+                <td><a href="{% url 'gametracker:game' game.pk %}"><p class="title is-6">{{ game.date|date:"d F Y" }}</p>
+                                                                   <p class="subtitle is-6">{{ game.date|date:"H:i" }}</p></a></td>
+                <td><a href="{% url 'gametracker:game' game.pk %}">{{ game.game_map }}</a></td>
+                <td>
+                    <table class="team_composition">
+                        <tr>
+                            <td class='won'><i class="fas fa-crown"></i></td>
+                            {% for player in game.winners %}
+                                <td><a href="{% url 'gametracker:game' game.pk %}">{{ player.identity.pseudo }}</a></td>
+                            {% endfor %}
+
+                            <!-- Fill table with empty cells -->
+                            {% for i in "1234" %}
+                                {% if forloop.counter0 < game.losers|diff:game.winners %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
+
+                        </tr>
+
+                        <tr>
+                            <td class="lost"><i class="fas fa-fw"></i></td>
+                            {% for player in game.losers %}
+                                <td><a href="{% url 'gametracker:game' game.pk %}">{{ player.identity.pseudo}}</a></td>
+                            {% endfor %}
+
+                            <!-- Fill table with empty cells -->
+                            {% for i in "1234" %}
+                                {% if forloop.counter0 < game.winners|diff:game.losers %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+    </div>
+</section>
+
+{% else %}
+<section class="section">
+    <div class="container">
+    <p>{% trans "Aucune partie dans la base de données..." %}</p>
+    </div>
+</section>
+{% endif %}
+
+<script type='text/javascript'>
+    $('tr').click(function(){
+        window.location = $(this).find('a').attr('href');
+    }).hover(function(){
+        $(this).toggleClass('hover');
+    });
+</script>
+
+{% endblock content %}
+

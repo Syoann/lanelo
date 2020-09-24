@@ -1,0 +1,46 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+
+<h2>{% trans "Ajouter une partie manuellement" %}</h2>
+
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div>
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="POST" action="{% url 'gametracker:manually_add_100games' %}">
+    {% csrf_token %}
+    <fieldset>
+        <p>
+            {{ form.game_map.label_tag }}
+            {{ form.game_map }}
+        </p>
+
+        <div class="form_teams">
+            {{ form.team1.label_tag }}
+            {{ form.team2.label_tag }}
+            {{ form.team1 }}
+            {{ form.team2 }}
+        </div>
+     
+        <p>
+            {{ form.winner.label_tag }}
+            {{ form.winner }}
+        </p>
+    </fieldset>
+    <button type="submit" name="save">{% trans "Enregistrer" %}</button>
+</form>
+
+{% endblock content %}

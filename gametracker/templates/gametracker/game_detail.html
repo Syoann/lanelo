@@ -2,12 +2,79 @@
 {% load i18n %}
 
 {% block content %}
-<h1>{% trans "Partie du " %}{{ game.date }}</h1>
+<section class="section">
+    <div class="container">
+        <h1 class="title is-1">{% trans "Partie du " %}{{ game.date }}</h1>
+        <p class="subtitle is-2">{{ game.game_map.name }}</p>
+    </div>
+</section>
 
-<div class="game">
-    <p>{% trans "Date:" %} {{ game.date }}</p>
-    <p>{% trans "Carte :" %} {{ game.game_map.name }}</p>
-    <p>{% trans "Equipe victorieuse : " %}{{ winners|join:", " }}</p>
-    <p>{% trans "Equipe perdante : " %} {{ losers|join:", " }}</p>
-</div>
+<section class="section">
+    <div class="container">
+        {% if game_replay.minimap %}
+        <div class="has-text-centered">
+            <img src="{{ game_replay.minimap.url }}" alt="Minimap" class="minimap" />
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="columns is-1 is-variable is-mobile is-multiline">
+        <div class="column is-narrow"><i class="fas fa-trophy"></i></div>
+        {% for player in winners %}
+            <div class="column is-narrow">
+            {% if player.identity.person %}
+                <a class="button is-success" title="{{ player.civilization }}" href="{% url 'gametracker:player' player.identity.person.name %}">{{ player.identity.pseudo }}</a>
+            {% else %}
+                <a class="button is-static" title="{{ player.civilization }}">{{ player.identity.pseudo }}</a>
+            {% endif %}
+            </div>
+        {% endfor %}
+        {% if var_elo %}
+            <div class="column is-narrow">
+                <p class="button is-rounded is-static has-text-success">+{{ var_elo }}</p>
+            </div>
+        {% endif %}
+        </div>
+            
+
+        <div class="columns is-1 is-variable is-mobile is-multiline">
+        <div class="column is-narrow"><i class="fa fa-fw"></i></div>
+        {% for player in losers %}
+            <div class="column is-narrow">
+            {% if player.identity.person %}
+                <a class="button is-danger" title="{{ player.civilization }}" href="{% url 'gametracker:player' player.identity.person.name %}">{{ player.identity.pseudo }}</a>
+            {% else %}
+                <a class="button is-static" title="{{ player.civilization }}">{{ player.identity.pseudo }}</a>
+            {% endif %}
+            </div>
+        {% endfor %}
+        {% if var_elo %}
+            <div class="column is-narrow">
+                <p class="button is-rounded is-static has-text-danger">-{{ var_elo }}</p>
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        {% if game_replay.chronology %}
+        <div class="chronology_container">
+            <img src="{{ game_replay.chronology.url }}" alt="Chronology of researches" class="chronology" />
+        </div>
+        {% endif %}
+    </div>
+<section>
+
+{% if game_replay %}
+<section class="section">
+    <div class="container has-text-centered">
+        <a class="button is-info" href="{{ game_replay.replay.url }}">{% trans "Télécharger le replay" %}</a>
+    </div>
+{% endif %}
+</section>
 {% endblock content %}

@@ -3,54 +3,59 @@
 
 {% block content %}
 
-<h2>{% trans "Ajout d'une partie" %}</h2>
+<section class="section">
+    <div class="container">
+        <h1 class="title">{% trans "Ajouter une partie" %}</h1>
+    </div>
+</section>
 
-{% if form.errors %}
-    {% for field in form %}
-        {% for error in field.errors %}
-            <div>
-                <strong>{{ error|escape }}</strong>
-            </div>
-        {% endfor %}
-    {% endfor %}
-    {% for error in form.non_field_errors %}
-        <div>
-            <strong>{{ error|escape }}</strong>
-        </div>
-    {% endfor %}
-{% endif %}
 
-<form method="POST">
+<section class="section">
+    <div class="container">
+        <p>
+        Ajoutez une partie à partir d'un replay. Les formats supportés sont ceux de Age of 
+        Empires&nbsp;II&nbsp;HD (.aoe2record) et de Age of Forgotten Empires (.mgz).
+        </p>
+    </div>
+</section>
+
+<form id="form" method="POST" enctype="multipart/form-data" action="{% url 'gametracker:add_game' %}">
     {% csrf_token %}
-    <fieldset>
-        <legend>Ajouter une partie manuellement</legend>
-        <p>
-            {{ form.game_map.label_tag }}
-            {{ form.game_map }}
-        </p>
-
-        <div class="form_teams">
-            {{ form.team1.label_tag }}
-            {{ form.team2.label_tag }}
-            {{ form.team1 }}
-            {{ form.team2 }}
+    <div class="field">
+        <div class="file is-info has-name is-centered">
+            <label class="file-label">
+                <input id="file" class="file-input" type="file" name="replay">
+                <span class="file-cta">
+                <span class="file-icon">
+                <span class="fas fa-upload"></span>
+                </span>
+                <span class="file-label"> {% trans "Choisir un replay…" %} </span>
+                </span>
+                <span id="filename" class="file-name">{% trans "Aucun fichier" %}</span>
+            </label>
         </div>
-     
-        <p>
-            {{ form.winner.label_tag }}
-            {{ form.winner }}
-        </p>
-    </fieldset>
-    <button type="submit" name="save">{% trans "Enregistrer" %}</button>
+    </div>
 </form>
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    <fieldset>
-        <legend>{% trans "Ajouter un replay" %}</legend>
-        {% trans "Replay de la partie :" %} {{ form.game_file }}
-    </fieldset>
-    <button type="submit" name="upload">{% trans "Ajouter" %}</button>
-</form>
+<section class="section">
+    <div class="container">
+        <div class="has-text-centered">
+            <button id="loading" class="button is-warning is-info" style="display: none;">
+                {% trans "Chargement..." %}
+            </button>
+        </div>
+    </div>
+</section>
+
+<script type="text/javascript">
+    var file = document.getElementById("file");
+    file.onchange = function(){
+        document.getElementById("form").submit();
+        if(file.files.length > 0) {
+            document.getElementById('filename').innerHTML = file.files[0].name;
+        }
+        document.getElementById("loading").style.display='inline';
+    };
+</script>
 
 {% endblock content %}

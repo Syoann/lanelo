@@ -1,0 +1,104 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n custom_tags static %}
+
+{% block content %}
+
+<section class="section">
+    <div class="container">
+          <header>
+        <nav class="level">
+            <div class="level-left">
+            <div class="level-item">
+                <p class="title is-2">
+                    {{ person.name }}
+                </p>
+            </div>
+            {% if person.avatar %}
+            <div class="level-item">
+              <figure class="image is-128x128">
+                <img class="is-centered" src="{{ person.avatar.url }}" alt="Avatar {{ person.name }}" />
+              </figure>
+            </div>
+            {% endif %}
+            </div>
+        </nav>
+
+        <nav class="level">
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">Elo</p>
+              <p class="title"><i class="fas fa-crown"></i> {{ person.elo }}</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+              <p class="heading">{% trans "Victoires" %}</p>
+              <p class="title"><i class="fas fa-trophy"></i> {{ victories }}/{{ victories|add:defeats }} ({{ ratio|floatformat:"0" }}%)</p>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+            </div>
+          </div>
+          <div class="level-item has-text-centered">
+            <div>
+            </div>
+          </div>
+        </nav>
+
+        {% if elos|length >= 3 %}
+            <canvas id="chartElo"></canvas>
+        {% endif %}
+        </div>
+    </div>
+</section>
+
+<script src="{% static 'js/Chart.bundle.min.js' %}"></script>
+<script src="{% static 'jquery/jquery.min.js' %}"</script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"</script>
+<script type="text/javascript">
+    function range(start, end) {
+        return (new Array(end - start + 1)).fill(undefined).map((_, i) => i + start);
+    }
+
+    $(document).ready(function() {
+        var data = { labels: range(0, {{ elos|length|add:"-1" }}), 
+                     datasets: [ { label: "Elo",
+                     backgroundColor: "#209cee90",
+                     borderColor: "#209cee90",
+                     pointBackgroundColor: "#fff",
+                     pointBorderColor: "#209cee90",
+                     pointStrokeColor: "#209cee90",
+                     pointHighlightFill: "#fff",
+                     pointHighlightStroke: "rgba(220,220,220,1)",
+                     pointHoverBackgroundColor: "#fff",
+                     pointHoverBorderColor: "#ff000090",
+                     data: {{ elos }} } ]
+                   };
+        var options = { title: { display: true,
+                                 text: "Elo au cours des parties",
+                                 fontSize: 16,
+                        },
+                        legend: { display: false },
+                        tooltips: { displayColors: false,
+                                    callbacks: {
+                                        title: function(tooltipItems, data) { return 'Partie ' + tooltipItems[0].xLabel;  
+                                        },
+                                    },
+                        },
+                      };
+        var ctx = document.getElementById("chartElo").getContext("2d");
+        var myLineChart = new Chart(ctx, {type: "line", data:data, options: options});
+
+        var cv = document.getElementById("chartElo");
+        cv.onclick = function(evt){
+            var activePoint = myLineChart.getElementAtEvent(evt);
+            console.log('activePoint', activePoint);
+        };
+    });
+</script>
+{% endblock content %}

@@ -1,21 +1,27 @@
 {% load i18n %}
 
-{% if player_list %}
-<table class="player_list">
-    <tr>
-        <th>{% trans "Nom" %}</th>
-        <th>{% trans "Elo" %}</th>
-        <th>{% trans "# Parties" %}</th>
-    </tr>
+{% if person_list %}
+<div class="is-narrow">
+<table class="table is-striped is-hoverable">
+    <thead>
+        <tr class="is-selected">
+            <th>{% trans "Nom" %}</th>
+            <th>{% trans "Elo" %}</th>
+            <th>{% trans "#&nbsp;Parties" %}</th>
+        </tr>
+    </thead>
 
-    {% for player in player_list %}
+    <tbody>
+    {% for person in person_list %}
         <tr>
-            <td><a href={% url 'gametracker:player' player.name %}>{{ player.name }}</a></td>
-            <td>{{ player.elo }}</td>
-            <td>{{ player.ngames }}</td>
+            <td><a href={% url 'gametracker:player' person.name %}>{{ person.name }}</a></td>
+            <td class="has-text-centered">{{ person.elo }}</td>
+            <td class="has-text-centered">{{ person.ngames }}</td>
         </tr>
     {% endfor %}
+    </tbody>
 </table>
+<div>
 {% else %}
-    <p>No player in the database.</p>
+    <p class="is-warning">{% trans "Aucun joueur dans la base de données..." %}</p>
 {% endif %}

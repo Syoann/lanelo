@@ -1,0 +1,58 @@
+{% extends 'gametracker/base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title">{% trans "Build orders" %}</h1>
+            <p class="subtitle">Ordres de construction optimaux</p>
+        </div>
+    </section>
+    
+    <section class="section">
+        <div class="content">
+            Tout début de partie, commun à tous les build orders : 
+            <ul>
+                <li>Lancer la création de 4 villageois
+                <li>2 villageois construisent une maison, 1 villageois construit une maison
+                <li>Ramener deux moutons sous le forum
+                <li>Lancer le cavalier pour l'exploration
+            </ul>
+        </div>
+    </section>
+
+    <section class="section">
+    <div class="content">
+        <h4 class="title is-4">Classique</h4>
+        <h5 class="title is-5">Age sombre</h5>
+
+        <ul>
+            <li>Villageois 1 à 6 : Dépecer les moutons un par un.
+            <li>Villageois 7 à 10 : Construire un camp de bucheron sur une forêt avec le premier
+                puis envoyer les 3 villageois suivants au bois.
+            <li>Villageois 11 : Sur le chemin vers le premier sanglier, construire une maison. Puis attaquer 
+                le sanglier avec deux coups et le ramener au forum. Ce villageois blessé construira 
+                ensuite une ferme en bas à droite du forum.
+            <li>Villageois 12 à 14: Construire un moulin près des baies (ou près des biches sur Scandinavie)
+                et récolter les baies.
+            <li>Villageois 15: Sur le chemin pour le second sanglier, construire une maison.
+                Chasser ensuite le second sanglier. Ce villageois blessé construira ensuite une ferme à droite du forum.
+            <li>Villageois 16: Baies.
+            <li>Villageois 17 à 20: Construire un deuxième camp de bucheron avec le premier et
+                envoyer les 3 villageois suivants au bois.
+            <li>Villageois 21 et 22: Construire un camp de mineur près de l'or et miner.
+            <li>Villageois 23: Bois
+            <li>Villageois 24 et 25: Fermes.
+        </ul>
+        <p>Développer métier à tisser dans le forum
+           (peut se faire avant de chasser le premier sanglier)</p>
+
+        <p>Passer à l'âge féodal</p>
+
+        <p>Les villageois ayant fini les sangliers peuvent aller chasser les biches ou construire des
+        fermes.</p>
+
+        <p>Construire une caserne et une habitation</p>
+    </div>
+</section>
+{% endblock content %}

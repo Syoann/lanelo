@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-28 16:11+0200\n"
+"POT-Creation-Date: 2018-10-19 13:50+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,124 +17,189 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: lanelo/settings.py:125
-msgid "English"
-msgstr "English"
-
-#: lanelo/settings.py:126
-msgid "French"
-msgstr "French"
-
-#: gametracker/forms.py:9 gametracker/templates/gametracker/history.html:12
+#: forms.py:20 templates/gametracker/history.html:20
 msgid "Carte"
 msgstr "Map"
 
-#: gametracker/forms.py:10
-#, fuzzy
-#| msgid "Équipe 1"
-msgid "Equipe 1"
-msgstr "Team 1"
+#: forms.py:51
+msgid "Vainqueurs"
+msgstr "Winners"
 
-#: gametracker/forms.py:11
-#, fuzzy
-#| msgid "Équipe 2"
-msgid "Equipe 2"
-msgstr "Team 2"
+#: forms.py:53
+msgid "Perdants"
+msgstr "Losers"
 
-#: gametracker/forms.py:16
-msgid "Gagnant"
-msgstr "Winner"
-
-#: gametracker/forms.py:20
-#, fuzzy
-#| msgid "Joueurs présents"
-msgid "Joueurs presents"
+#: forms.py:69
+msgid "Joueurs présents"
 msgstr "Present players"
 
-#: gametracker/templates/gametracker/add_game.html:6
-msgid "Ajout d'une partie"
+#: templates/gametracker/add_game.html:8 templates/gametracker/menu.html:25
+msgid "Ajouter une partie"
 msgstr "Add game"
 
-#: gametracker/templates/gametracker/add_game.html:13
-msgid "Enregistrer"
-msgstr "Save"
+#: templates/gametracker/add_game.html:32
+msgid "Choisir un replay…"
+msgstr "Choose a replay file…"
 
-#: gametracker/templates/gametracker/balance_teams.html:6
-#, fuzzy
-#| msgid "Composition des équipes"
-msgid "Composition des equipes"
+#: templates/gametracker/add_game.html:34
+msgid "Aucun fichier"
+msgstr "No file"
+
+#: templates/gametracker/add_game.html:44
+msgid "Chargement..."
+msgstr "Loading..."
+
+#: templates/gametracker/balance_teams.html:7
+msgid "Composition des équipes"
 msgstr "Create teams"
 
-#: gametracker/templates/gametracker/balance_teams.html:13
-msgid "Valider"
-msgstr "Run"
+#: templates/gametracker/balance_teams.html:25
+msgid "Équipes proposées"
+msgstr "Proposed teams"
 
-#: gametracker/templates/gametracker/balance_teams.html:18
-msgid "&Eacute;quipes propos&eacute;es :"
-msgstr "Proposed teams:"
-
-#: gametracker/templates/gametracker/balance_teams.html:27
+#: templates/gametracker/balance_teams.html:34
 msgid "ou bien :"
 msgstr "or:"
 
-#: gametracker/templates/gametracker/history.html:7
-#, fuzzy
-#| msgid "Historique"
+#: templates/gametracker/build_orders.html:7
+msgid "Build orders"
+msgstr "Build orders"
+
+#: templates/gametracker/duplicated_game.html:8
+msgid "Erreur"
+msgstr "Error"
+
+#: templates/gametracker/duplicated_game.html:9
+msgid "Partie dupliquée"
+msgstr "Duplicated game"
+
+#: templates/gametracker/game_detail.html:7
+msgid "Partie du "
+msgstr "Game played on "
+
+#: templates/gametracker/game_detail.html:78
+msgid "Télécharger le replay"
+msgstr "Download replay"
+
+#: templates/gametracker/history.html:9
 msgid "Historique des parties"
-msgstr "History"
+msgstr "Game history"
 
-#: gametracker/templates/gametracker/history.html:11
+#: templates/gametracker/history.html:19
 msgid "Date"
-msgstr ""
+msgstr "Date"
 
-#: gametracker/templates/gametracker/history.html:13
-#, fuzzy
-#| msgid "Équipe 1"
-msgid "Equipes"
-msgstr "Team 1"
+#: templates/gametracker/history.html:21
+msgid "Équipes"
+msgstr "Teams"
 
-#: gametracker/templates/gametracker/index.html:12
-#, fuzzy
-#| msgid "Classement"
+#: templates/gametracker/history.html:70
+msgid "Aucune partie dans la base de données..."
+msgstr "No game available in the database..."
+
+#: templates/gametracker/index.html:32
 msgid "Classement actuel"
-msgstr "Ranking"
+msgstr "Current ranking"
 
-#: gametracker/templates/gametracker/menu.html:6
+#: templates/gametracker/manually_add_100games.html:6
+msgid "Ajouter une partie manuellement"
+msgstr "Manually add a game"
+
+#: templates/gametracker/manually_add_100games.html:43
+msgid "Enregistrer"
+msgstr "Save"
+
+#: templates/gametracker/manually_add_game.html:8
+msgid "Créer une partie manuellement"
+msgstr "Manually create a game"
+
+#: templates/gametracker/menu.html:14
+msgid "Home"
+msgstr "Home"
+
+#: templates/gametracker/menu.html:16
 msgid "Joueurs"
 msgstr "Players"
 
-#: gametracker/templates/gametracker/menu.html:8
+#: templates/gametracker/menu.html:18
 msgid "Classement"
 msgstr "Ranking"
 
-#: gametracker/templates/gametracker/menu.html:12
-#, fuzzy
-#| msgid "# Parties"
+#: templates/gametracker/menu.html:22
 msgid "Parties"
 msgstr "Games"
 
-#: gametracker/templates/gametracker/menu.html:14
+#: templates/gametracker/menu.html:24
 msgid "Historique"
 msgstr "History"
 
-#: gametracker/templates/gametracker/menu.html:15
-#, fuzzy
-#| msgid "Ajout d'une partie"
-msgid "Ajout partie"
-msgstr "Add game"
+#: templates/gametracker/menu.html:26
+msgid "Créer une partie"
+msgstr "Create game"
 
-#: gametracker/templates/gametracker/menu.html:18
-msgid "Composer"
-msgstr "Teams"
+#: templates/gametracker/menu.html:29
+msgid "Équilibrer équipes"
+msgstr "Balance teams"
 
-#: gametracker/templates/gametracker/ranking.html:6
+#: templates/gametracker/menu.html:30
+msgid "Tutoriels"
+msgstr "Tutorials"
+
+#: templates/gametracker/person_detail.html:35
+msgid "Victoires"
+msgstr "Victories"
+
+#: templates/gametracker/person_list.html:7
+msgid "Classement des joueurs"
+msgstr "Players ranking"
+
+#: templates/gametracker/person_list.html:13
+#, python-format
+msgid ""
+"\n"
+"           Classement des joueurs après 1 partie classée.\n"
+"           "
+msgid_plural ""
+"\n"
+"           Classement des joueurs après %(n_games)s parties classées.\n"
+"           "
+msgstr[0] ""
+"\n"
+"           Ranking after 1 ranked game.\n"
+"           "
+msgstr[1] ""
+"\n"
+"           Ranking after %(n_games)s ranked games.\n"
+"           "
+
+#: templates/gametracker/player_detail.html:13
+msgid "Joueur :"
+msgstr "Player:"
+
+#: templates/gametracker/player_detail.html:14
+msgid "Elo :"
+msgstr "Elo :"
+
+#: templates/gametracker/player_detail.html:15
+msgid "Nombre de victoires :"
+msgstr "Number of victories:"
+
+#: templates/gametracker/player_detail.html:16
+msgid "Nombre de défaites :"
+msgstr "Number of defeats:"
+
+#: templates/gametracker/ranking.html:8
 msgid "Nom"
 msgstr "Name"
 
-#: gametracker/templates/gametracker/ranking.html:7
+#: templates/gametracker/ranking.html:9
 msgid "Elo"
 msgstr "Elo"
 
-#: gametracker/templates/gametracker/ranking.html:8
-msgid "# Parties"
-msgstr "# Games"
+#: templates/gametracker/ranking.html:10
+msgid "#&nbsp;Parties"
+msgstr "#&nbsp;Games"
+
+#: templates/gametracker/ranking.html:26
+msgid "Aucun joueur dans la base de données..."
+msgstr "No player in the database"

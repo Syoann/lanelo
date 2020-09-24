@@ -7,9 +7,6 @@ if __name__ == "__main__":
         from django.core.management import execute_from_command_line
         from django.conf import settings
     except ImportError:
-        # The above import may fail for some other reason. Ensure that the
-        # issue is really that Django is missing to avoid masking other
-        # exceptions on Python 2.
         try:
             import django
         except ImportError:
@@ -24,11 +21,5 @@ if __name__ == "__main__":
     if 'test' in sys.argv:
         settings.DEBUG = False
         settings.TEMPLATE_DEBUG = False
-
-        settings.MIDDLEWARE = ['debug_toolbar.middleware.DebugToolbarMiddleware',
-                               'django.contrib.sessions.middleware.SessionMiddleware',
-                               'django.middleware.csrf.CsrfViewMiddleware',
-                               'django.contrib.auth.middleware.AuthenticationMiddleware',
-                               'django.contrib.messages.middleware.MessageMiddleware']
 
     execute_from_command_line(sys.argv)
